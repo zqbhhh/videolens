@@ -271,6 +271,7 @@ app.post('/api/parse', async (req, res) => {
     }
 });
 
+// ─── Download: 302 redirect to CDN (avoids timeout & CORS) ───
 app.get('/api/download', async (req, res) => {
     const { url, filename, type } = req.query;
     if (!url) return res.status(400).json({ code: -1, msg: '缺少 url 参数' });
@@ -281,11 +282,12 @@ app.get('/api/download', async (req, res) => {
         const isAudio = type === 'audio';
         const ext = isAudio ? 'mp3' : 'mp4';
 
+        // Follow redirects to get final CDN URL
         let currentUrl = decodedUrl;
-        let resp;
         for (let i = 0; i < 5; i++) {
-            resp = await fetch(currentUrl, {
-                headers: { 'User-Agent': MOBILE_UA, 'Referer': 'https://www.douyin.com/' }
+            const resp = await fetch(currentUrl, {
+                headers: { 'User-Agent': MOBILE_UA, 'Referer': 'https://www.douyin.com/' },
+                redirect: 'manual'
             });
             if (resp.status >= 300 && resp.status < 400) {
                 const location = resp.headers.get('location');
@@ -297,22 +299,16 @@ app.get('/api/download', async (req, res) => {
             break;
         }
 
-        if (!resp || !resp.ok) {
-            return res.status(502).json({ code: -1, msg: `下载失败: HTTP ${resp?.status}` });
-        }
-
-        const chunks = [];
-        for await (const chunk of resp.body) { chunks.push(chunk); }
-        const buffer = Buffer.concat(chunks);
-
-        res.set({
-            'Content-Type': isAudio ? 'audio/mpeg' : 'video/mp4',
-            'Content-Length': buffer.length,
-            'Content-Disposition': `attachment; filename="${safeName}.${ext}"; filename*=UTF-8''${safeName}.${ext}`,
+        // Return JSON with the final CDN URL (frontend will handle download)
+        res.json({
+            code: 0,
+            data: {
+                url: currentUrl,
+                filename: `${safeName}.${ext}`
+            }
         });
-        res.send(buffer);
     } catch (err) {
-        res.status(500).json({ code: -1, msg: '下载失败: ' + err.message });
+        res.status(500).json({ code: -1, msg: '获取下载链接失败: ' + err.message });
     }
 });
 
