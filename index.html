@@ -1288,7 +1288,7 @@
 
     // ─── Show single result ───
     // ─── Force download file via fetch+blob ───
-    async function downloadFile(url, filename) {
+    window.downloadFile = async function(url, filename) {
         showStatus('正在下载，请稍候...', 'info');
         try {
             const resp = await fetch(url);
