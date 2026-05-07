@@ -1061,7 +1061,7 @@
     });
 
     // ─── State ───
-    let currentMode = 'single'; // 'single' or 'batch'
+    let currentMode = 'batch'; // 'single' or 'batch'
     let batchResults = [];
     let batchProgress = 0;
     let currentResult = null;
@@ -1108,6 +1108,9 @@
             showStatus('无法读取剪贴板，请手动粘贴', 'error');
         }
     });
+
+    // ─── Init default mode ───
+    switchMode('batch');
 
     // ─── Platform tabs ───
     document.querySelectorAll('.platform-tab').forEach(tab => {
