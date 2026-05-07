@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VideoLens 路 鐭棰戞棤姘村嵃瑙ｆ瀽</title>
+    <title>VideoLens · 短视频无水印解析</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -54,7 +54,7 @@
             z-index: 9999;
         }
 
-        /* 鈹€鈹€鈹€ Navigation 鈹€鈹€鈹€ */
+        /* ─── Navigation ─── */
         nav {
             position: fixed;
             top: 0;
@@ -114,7 +114,7 @@
         }
         .nav-links a:hover { color: var(--text-primary); }
 
-        /* 鈹€鈹€鈹€ Hero 鈹€鈹€鈹€ */
+        /* ─── Hero ─── */
         .hero {
             padding: 140px 40px 80px;
             text-align: center;
@@ -174,7 +174,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 鈹€鈹€鈹€ Parser Section 鈹€鈹€鈹€ */
+        /* ─── Parser Section ─── */
         .parser-section {
             max-width: 640px;
             margin: 0 auto;
@@ -299,7 +299,7 @@
         }
         .input-hint svg { width: 14px; height: 14px; }
 
-        /* 鈹€鈹€鈹€ Result Section 鈹€鈹€鈹€ */
+        /* ─── Result Section ─── */
         .result-section {
             max-width: 640px;
             margin: 0 auto;
@@ -406,7 +406,7 @@
             background: var(--accent-light);
         }
 
-        /* 鈹€鈹€鈹€ Error / Status 鈹€鈹€鈹€ */
+        /* ─── Error / Status ─── */
         .status-message {
             max-width: 640px;
             margin: 0 auto;
@@ -433,7 +433,7 @@
             border: 1px solid #A7F3D0;
         }
 
-        /* 鈹€鈹€鈹€ Features Section 鈹€鈹€鈹€ */
+        /* ─── Features Section ─── */
         .features {
             max-width: 900px;
             margin: 0 auto;
@@ -493,7 +493,7 @@
             line-height: 1.6;
         }
 
-        /* 鈹€鈹€鈹€ Footer 鈹€鈹€鈹€ */
+        /* ─── Footer ─── */
         footer {
             text-align: center;
             padding: 32px 40px;
@@ -502,7 +502,7 @@
             color: var(--text-tertiary);
         }
 
-        /* 鈹€鈹€鈹€ History 鈹€鈹€鈹€ */
+        /* ─── History ─── */
         .history-section {
             max-width: 640px;
             margin: 0 auto;
@@ -574,7 +574,7 @@
             flex-shrink: 0;
         }
 
-        /* 鈹€鈹€鈹€ Input Toolbar 鈹€鈹€鈹€ */
+        /* ─── Input Toolbar ─── */
         .input-toolbar {
             display: flex;
             align-items: center;
@@ -610,7 +610,7 @@
             color: var(--text-tertiary);
         }
 
-        /* 鈹€鈹€鈹€ Paste Button 鈹€鈹€鈹€ */
+        /* ─── Paste Button ─── */
         .paste-btn {
             padding: 12px 14px;
             background: var(--accent-light);
@@ -645,7 +645,7 @@
         }
         .input-wrapper:focus-within { border-color: var(--accent); }
 
-        /* 鈹€鈹€鈹€ URL textarea (batch mode) 鈹€鈹€鈹€ */
+        /* ─── URL textarea (batch mode) ─── */
         .url-input {
             resize: none;
             overflow-y: auto;
@@ -660,7 +660,7 @@
             margin-top: -1px;
         }
 
-        /* 鈹€鈹€鈹€ Download buttons 鈹€鈹€鈹€ */
+        /* ─── Download buttons ─── */
         .result-actions {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -700,7 +700,7 @@
         }
         .download-btn-copy:hover { border-color: var(--border-hover); }
 
-        /* 鈹€鈹€鈹€ Batch Section 鈹€鈹€鈹€ */
+        /* ─── Batch Section ─── */
         .batch-section {
             max-width: 640px;
             margin: 0 auto;
@@ -811,7 +811,7 @@
         .batch-item-btn:hover { background: var(--accent-light); }
         .batch-item-btn svg { width: 13px; height: 13px; }
 
-        /* 鈹€鈹€鈹€ Progress bar 鈹€鈹€鈹€ */
+        /* ─── Progress bar ─── */
         .batch-progress {
             margin-bottom: 16px;
         }
@@ -833,7 +833,7 @@
             color: var(--text-secondary);
         }
 
-        /* 鈹€鈹€鈹€ Responsive 鈹€鈹€鈹€ */
+        /* ─── Responsive ─── */
         @media (max-width: 768px) {
             nav { padding: 0 20px; }
             .nav-links { display: none; }
@@ -860,8 +860,8 @@
         <span class="nav-logo-text">VideoLens</span>
     </a>
     <ul class="nav-links">
-        <li><a href="#parser">瑙ｆ瀽</a></li>
-        <li><a href="#features">鐗规€?/a></li>
+        <li><a href="#parser">解析</a></li>
+        <li><a href="#features">特性</a></li>
     </ul>
 </nav>
 
@@ -869,50 +869,53 @@
 <section class="hero">
     <div class="hero-badge">
         <span class="hero-badge-dot"></span>
-        鏀寔鎶栭煶 路 蹇墜 路 灏忕孩涔?路 B绔?    </div>
-    <h1><span>绮樿创閾炬帴锛岃幏鍙?br>鏃犳按鍗拌棰?/span></h1>
-    <p>鏀寔涓绘祦鐭棰戝钩鍙帮紝涓€閿В鏋愬師濮嬮珮娓呰棰戯紝鏃犳按鍗颁笅杞戒繚瀛?/p>
+        支持抖音 · 快手 · 小红书 · B站
+    </div>
+    <h1><span>粘贴链接，获取<br>无水印视频</span></h1>
+    <p>支持主流短视频平台，一键解析原始高清视频，无水印下载保存</p>
 </section>
 
 <!-- Parser -->
 <section class="parser-section" id="parser">
     <div class="parser-card">
         <div class="platform-tabs">
-            <button class="platform-tab active" data-platform="douyin" title="鎶栭煶">
+            <button class="platform-tab active" data-platform="douyin" title="抖音">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
                 </svg>
-                鎶栭煶
+                抖音
             </button>
-            <button class="platform-tab" data-platform="kuaishou" title="蹇墜">
+            <button class="platform-tab" data-platform="kuaishou" title="快手">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
-                蹇墜
+                快手
             </button>
-            <button class="platform-tab" data-platform="xiaohongshu" title="灏忕孩涔?>
+            <button class="platform-tab" data-platform="xiaohongshu" title="小红书">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                 </svg>
-                灏忕孩涔?            </button>
-            <button class="platform-tab" data-platform="bilibili" title="B绔?>
+                小红书
+            </button>
+            <button class="platform-tab" data-platform="bilibili" title="B站">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <rect x="2" y="4" width="20" height="16" rx="3"/>
                     <path d="M8 2v4M16 2v4M2 10h20"/>
                 </svg>
-                B绔?            </button>
+                B站
+            </button>
         </div>
         <div class="input-group">
             <div class="input-toolbar">
                 <div class="mode-toggle">
-                    <button class="mode-btn active" data-mode="single" id="modeSingle">鍗曚釜瑙ｆ瀽</button>
-                    <button class="mode-btn" data-mode="batch" id="modeBatch">鎵归噺瑙ｆ瀽</button>
+                    <button class="mode-btn active" data-mode="single" id="modeSingle">单个解析</button>
+                    <button class="mode-btn" data-mode="batch" id="modeBatch">批量解析</button>
                 </div>
-                <div class="mode-hint" id="modeHint">绮樿创閾炬帴鑷姩瑙ｆ瀽</div>
+                <div class="mode-hint" id="modeHint">粘贴链接自动解析</div>
             </div>
             <div class="input-wrapper">
-                <textarea class="url-input" id="urlInput" placeholder="绮樿创瑙嗛鍒嗕韩閾炬帴锛屽 https://v.douyin.com/..." rows="1" autocomplete="off"></textarea>
-                <button class="paste-btn" id="pasteBtn" title="绮樿创">
+                <textarea class="url-input" id="urlInput" placeholder="粘贴视频分享链接，如 https://v.douyin.com/..." rows="1" autocomplete="off"></textarea>
+                <button class="paste-btn" id="pasteBtn" title="粘贴">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
@@ -923,8 +926,8 @@
                         <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
                         <path d="M21 3v5h-5"/>
                     </svg>
-                    <span class="parse-text">瑙ｆ瀽</span>
-                    <span class="parse-loading" style="display:none;">瑙ｆ瀽涓?..</span>
+                    <span class="parse-text">解析</span>
+                    <span class="parse-loading" style="display:none;">解析中...</span>
                 </button>
             </div>
             <div class="input-hint">
@@ -932,7 +935,7 @@
                     <circle cx="12" cy="12" r="10"/>
                     <path d="M12 16v-4M12 8h.01"/>
                 </svg>
-                鏀寔鍒嗕韩鍙ｄ护銆佺煭閾炬帴銆佸畬鏁撮摼鎺ワ紝鑷姩璇嗗埆骞冲彴
+                支持分享口令、短链接、完整链接，自动识别平台
             </div>
         </div>
     </div>
@@ -949,12 +952,12 @@
     <div class="batch-header">
         <div class="batch-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            鎵归噺瑙ｆ瀽瀹屾垚
+            批量解析完成
         </div>
         <div class="batch-actions">
             <button class="batch-download-all-btn" id="batchDownloadAllBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                涓嬭浇鍏ㄩ儴 (ZIP)
+                下载全部 (ZIP)
             </button>
         </div>
     </div>
@@ -964,8 +967,8 @@
 <!-- History -->
 <div class="history-section" id="historySection" style="display:none;">
     <div class="history-header">
-        <h3>瑙ｆ瀽鍘嗗彶</h3>
-        <button class="history-clear" id="clearHistory">娓呯┖</button>
+        <h3>解析历史</h3>
+        <button class="history-clear" id="clearHistory">清空</button>
     </div>
     <div class="history-list" id="historyList"></div>
 </div>
@@ -973,8 +976,8 @@
 <!-- Features -->
 <section class="features" id="features">
     <div class="features-header">
-        <h2>涓轰粈涔堥€夋嫨 VideoLens</h2>
-        <p>绠€娲併€佸揩閫熴€佸畨鍏?/p>
+        <h2>为什么选择 VideoLens</h2>
+        <p>简洁、快速、安全</p>
     </div>
     <div class="features-grid">
         <div class="feature-card">
@@ -983,8 +986,8 @@
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
             </div>
-            <h3>鏋侀€熻В鏋?/h3>
-            <p>鍏堣繘鐨勮В鏋愬紩鎿庯紝绉掔骇鍝嶅簲锛岀矘璐撮摼鎺ュ嵆鍙幏鍙栨棤姘村嵃瑙嗛</p>
+            <h3>极速解析</h3>
+            <p>先进的解析引擎，秒级响应，粘贴链接即可获取无水印视频</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">
@@ -993,8 +996,8 @@
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
             </div>
-            <h3>闅愮瀹夊叏</h3>
-            <p>涓嶅瓨鍌ㄤ换浣曡棰戞暟鎹紝鎵€鏈夎В鏋愬湪鏈嶅姟绔嵆鏃跺畬鎴愶紝淇濇姢浣犵殑闅愮</p>
+            <h3>隐私安全</h3>
+            <p>不存储任何视频数据，所有解析在服务端即时完成，保护你的隐私</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">
@@ -1004,21 +1007,23 @@
                     <line x1="12" y1="17" x2="12" y2="21"/>
                 </svg>
             </div>
-            <h3>澶氱閫傞厤</h3>
-            <p>鏀寔鎵嬫満銆佸钩鏉裤€佺數鑴戠瓑璁惧锛岄殢鏃堕殢鍦拌В鏋愪綘鍠滄鐨勮棰?/p>
+            <h3>多端适配</h3>
+            <p>支持手机、平板、电脑等设备，随时随地解析你喜欢的视频</p>
         </div>
     </div>
 </section>
 
 <!-- Footer -->
 <footer>
-    VideoLens 路 浠呬緵瀛︿範浜ゆ祦浣跨敤锛岃鍕跨敤浜庡晢涓氱敤閫?</footer>
+    VideoLens · 仅供学习交流使用，请勿用于商业用途
+</footer>
 
 <script>
 (function() {
     'use strict';
 
-    const API_BASE = '';  // 鍚屽煙閮ㄧ讲锛屼娇鐢ㄧ浉瀵硅矾寰?    let currentPlatform = 'douyin';
+    const API_BASE = '';  // 同域部署，使用相对路径
+    let currentPlatform = 'douyin';
     let history = JSON.parse(localStorage.getItem('videolens_history') || '[]');
 
     // DOM Elements
@@ -1033,35 +1038,35 @@
 
     // Platform detection patterns
     const platformPatterns = {
-        douyin: /douyin|鎶栭煶|iesdouyin|v\.douyin/i,
-        kuaishou: /kuaishou|蹇墜|v\.kuaishou|v\.kwai/i,
-        xiaohongshu: /xiaohongshu|灏忕孩涔xhslink/i,
-        bilibili: /bilibili|b绔檤b23\.tv/i
+        douyin: /douyin|抖音|iesdouyin|v\.douyin/i,
+        kuaishou: /kuaishou|快手|v\.kuaishou|v\.kwai/i,
+        xiaohongshu: /xiaohongshu|小红书|xhslink/i,
+        bilibili: /bilibili|b站|b23\.tv/i
     };
 
-    // 鈹€鈹€鈹€ Extract URL from share text (e.g. "7.48 Y@z.Gi ... https://v.douyin.com/xxx/ 澶嶅埗姝ら摼鎺?..") 鈹€鈹€鈹€
+    // ─── Extract URL from share text (e.g. "7.48 Y@z.Gi ... https://v.douyin.com/xxx/ 复制此链接...") ───
     function extractUrl(text) {
         // Match http/https URLs
         const urlMatch = text.match(/https?:\/\/[^\s\u4e00-\u9fff]+/);
         if (urlMatch) {
             // Clean trailing punctuation
-            return urlMatch[0].replace(/[锛屻€傦紒锛熴€侊紱锛?"''锛夈€戙€媇+$/, '');
+            return urlMatch[0].replace(/[，。！？、；：""''）】》]+$/, '');
         }
         return text.trim();
     }
 
-    // 鈹€鈹€鈹€ Navigation scroll effect 鈹€鈹€鈹€
+    // ─── Navigation scroll effect ───
     window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', window.scrollY > 10);
     });
 
-    // 鈹€鈹€鈹€ State 鈹€鈹€鈹€
+    // ─── State ───
     let currentMode = 'single'; // 'single' or 'batch'
     let batchResults = [];
     let batchProgress = 0;
     let currentResult = null;
 
-    // 鈹€鈹€鈹€ Mode toggle 鈹€鈹€鈹€
+    // ─── Mode toggle ───
     document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
     document.getElementById('modeBatch').addEventListener('click', () => switchMode('batch'));
 
@@ -1069,15 +1074,15 @@
         currentMode = mode;
         document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
         document.getElementById('modeBatch').classList.toggle('active', mode === 'batch');
-        document.getElementById('modeHint').textContent = mode === 'single' ? '绮樿创閾炬帴鑷姩瑙ｆ瀽' : '涓€琛屼竴涓摼鎺ワ紝鏀寔澶氫釜';
+        document.getElementById('modeHint').textContent = mode === 'single' ? '粘贴链接自动解析' : '一行一个链接，支持多个';
 
         const input = document.getElementById('urlInput');
         if (mode === 'batch') {
-            input.placeholder = '绮樿创澶氫釜瑙嗛閾炬帴锛屾瘡琛屼竴涓?..\n渚嬪锛歕nhttps://v.douyin.com/xxx1\nhttps://v.douyin.com/xxx2';
+            input.placeholder = '粘贴多个视频链接，每行一个...\n例如：\nhttps://v.douyin.com/xxx1\nhttps://v.douyin.com/xxx2';
             input.rows = 4;
             input.classList.add('batch-mode');
         } else {
-            input.placeholder = '绮樿创瑙嗛鍒嗕韩閾炬帴锛屽 https://v.douyin.com/...';
+            input.placeholder = '粘贴视频分享链接，如 https://v.douyin.com/...';
             input.rows = 1;
             input.classList.remove('batch-mode');
         }
@@ -1088,7 +1093,7 @@
         hideStatus();
     }
 
-    // 鈹€鈹€鈹€ Paste button 鈹€鈹€鈹€
+    // ─── Paste button ───
     document.getElementById('pasteBtn').addEventListener('click', async () => {
         try {
             const text = await navigator.clipboard.readText();
@@ -1100,11 +1105,11 @@
                 if (cleanUrl) handleParse();
             }
         } catch (err) {
-            showStatus('鏃犳硶璇诲彇鍓创鏉匡紝璇锋墜鍔ㄧ矘璐?, 'error');
+            showStatus('无法读取剪贴板，请手动粘贴', 'error');
         }
     });
 
-    // 鈹€鈹€鈹€ Platform tabs 鈹€鈹€鈹€
+    // ─── Platform tabs ───
     document.querySelectorAll('.platform-tab').forEach(tab => {
         tab.addEventListener('click', () => {
             document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
@@ -1113,7 +1118,7 @@
         });
     });
 
-    // 鈹€鈹€鈹€ Auto-detect platform from URL 鈹€鈹€鈹€
+    // ─── Auto-detect platform from URL ───
     urlInput.addEventListener('input', () => {
         const url = urlInput.value.trim();
         if (!url) return;
@@ -1128,7 +1133,7 @@
         }
     });
 
-    // 鈹€鈹€鈹€ Paste event 鈹€鈹€鈹€
+    // ─── Paste event ───
     urlInput.addEventListener('paste', () => {
         setTimeout(() => {
             const raw = urlInput.value.trim();
@@ -1141,7 +1146,7 @@
         }, 100);
     });
 
-    // 鈹€鈹€鈹€ Parse button click 鈹€鈹€鈹€
+    // ─── Parse button click ───
     parseBtn.addEventListener('click', handleParse);
     urlInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -1150,7 +1155,7 @@
         }
     });
 
-    // 鈹€鈹€鈹€ Main parse function 鈹€鈹€鈹€
+    // ─── Main parse function ───
     async function handleParse() {
         if (currentMode === 'batch') {
             return handleBatchParse();
@@ -1158,7 +1163,7 @@
 
         let url = extractUrl(urlInput.value.trim());
         if (!url) {
-            showStatus('璇疯緭鍏ヨ棰戦摼鎺?, 'error');
+            showStatus('请输入视频链接', 'error');
             return;
         }
 
@@ -1180,34 +1185,34 @@
                 currentResult = data.data;
                 showSingleResult(data.data);
                 addToHistory(data.data);
-                showStatus('瑙ｆ瀽鎴愬姛', 'success');
+                showStatus('解析成功', 'success');
             } else {
-                showStatus(data.msg || '瑙ｆ瀽澶辫触锛岃妫€鏌ラ摼鎺ユ槸鍚︽纭?, 'error');
+                showStatus(data.msg || '解析失败，请检查链接是否正确', 'error');
             }
         } catch (err) {
             console.error(err);
-            showStatus('鏃犳硶杩炴帴鍒版湇鍔″櫒锛岃纭鍚庣鏈嶅姟宸插惎鍔?, 'error');
+            showStatus('无法连接到服务器，请确认后端服务已启动', 'error');
         } finally {
             setLoading(false);
         }
     }
 
-    // 鈹€鈹€鈹€ Batch parse 鈹€鈹€鈹€
+    // ─── Batch parse ───
     async function handleBatchParse() {
         const raw = urlInput.value.trim();
         if (!raw) {
-            showStatus('璇疯緭鍏ヨ棰戦摼鎺?, 'error');
+            showStatus('请输入视频链接', 'error');
             return;
         }
 
         // Extract all URLs
         const lines = raw.split('\n').map(l => extractUrl(l.trim())).filter(Boolean);
         if (lines.length === 0) {
-            showStatus('鏈兘浠庢枃鏈腑鎻愬彇鍒版湁鏁堢殑瑙嗛閾炬帴', 'error');
+            showStatus('未能从文本中提取到有效的视频链接', 'error');
             return;
         }
         if (lines.length > 20) {
-            showStatus('鎵归噺瑙ｆ瀽鏈€澶氭敮鎸?20 涓摼鎺?, 'error');
+            showStatus('批量解析最多支持 20 个链接', 'error');
             return;
         }
 
@@ -1254,7 +1259,7 @@
                 }
             } catch (err) {
                 batchResults[i].status = 'error';
-                batchResults[i].error = '缃戠粶閿欒';
+                batchResults[i].error = '网络错误';
             }
 
             batchProgress = Math.round(((i + 1) / batchResults.length) * 100);
@@ -1265,25 +1270,25 @@
         batchProgress = 0;
 
         if (successCount.val > 0) {
-            showStatus(`鎵归噺瑙ｆ瀽瀹屾垚锛?{successCount.val}/${batchResults.length} 涓垚鍔焋, successCount.val === batchResults.length ? 'success' : 'error');
+            showStatus(`批量解析完成：${successCount.val}/${batchResults.length} 个成功`, successCount.val === batchResults.length ? 'success' : 'error');
         } else {
-            showStatus('鎵€鏈夐摼鎺ヨВ鏋愬け璐?, 'error');
+            showStatus('所有链接解析失败', 'error');
         }
 
         renderBatchResults();
     }
 
     function detectPlatformFromUrl(url) {
-        if (/douyin|鎶栭煶|iesdouyin|v\.douyin/i.test(url)) return 'douyin';
-        if (/kuaishou|蹇墜|v\.kuaishou|v\.kwai/i.test(url)) return 'kuaishou';
-        if (/xiaohongshu|灏忕孩涔xhslink/i.test(url)) return 'xiaohongshu';
-        if (/bilibili|b绔檤b23\.tv/i.test(url)) return 'bilibili';
+        if (/douyin|抖音|iesdouyin|v\.douyin/i.test(url)) return 'douyin';
+        if (/kuaishou|快手|v\.kuaishou|v\.kwai/i.test(url)) return 'kuaishou';
+        if (/xiaohongshu|小红书|xhslink/i.test(url)) return 'xiaohongshu';
+        if (/bilibili|b站|b23\.tv/i.test(url)) return 'bilibili';
         return currentPlatform;
     }
 
-    // 鈹€鈹€鈹€ Show single result 鈹€鈹€鈹€
+    // ─── Show single result ───
     function showSingleResult(info) {
-        const platformNames = { douyin: '鎶栭煶', kuaishou: '蹇墜', xiaohongshu: '灏忕孩涔?, bilibili: 'B绔? };
+        const platformNames = { douyin: '抖音', kuaishou: '快手', xiaohongshu: '小红书', bilibili: 'B站' };
         const safeName = (info.title || 'video').replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || 'video';
         const downloadUrl = `${API_BASE}/api/download?url=${encodeURIComponent(info.video_url)}&filename=${encodeURIComponent(safeName)}`;
 
@@ -1300,12 +1305,12 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
                                 <polygon points="5 3 19 12 5 21 5 3"/>
                             </svg>
-                            鏆傛棤瑙嗛棰勮
+                            暂无视频预览
                         </div>
                     `}
                 </div>
                 <div class="result-info">
-                    <div class="result-title">${escapeHtml(info.title || '鏈煡鏍囬')}</div>
+                    <div class="result-title">${escapeHtml(info.title || '未知标题')}</div>
                     <div class="result-meta">
                         ${info.author ? `<span class="result-meta-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1313,28 +1318,29 @@
                         </span>` : ''}
                         <span class="result-meta-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                            ${platformNames[info.platform] || '鏈煡骞冲彴'}
+                            ${platformNames[info.platform] || '未知平台'}
                         </span>
                     </div>
                     <div class="result-actions">
                         ${info.video_url ? `
                             <a href="${downloadUrl}" class="download-btn download-btn-video">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                涓嬭浇瑙嗛
+                                下载视频
                             </a>
                             ${info.music_url ? `
                                 <a href="${API_BASE}/api/download?url=${encodeURIComponent(info.music_url)}&filename=${encodeURIComponent(info.music_title || safeName)}&type=audio" class="download-btn download-btn-audio">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                                    涓嬭浇闊抽
+                                    下载音频
                                 </a>
                             ` : `
                                 <span class="download-btn download-btn-audio" style="opacity:0.4;cursor:not-allowed;">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                                    鏃犻煶棰?                                </span>
+                                    无音频
+                                </span>
                             `}
-                            <button class="download-btn download-btn-copy" onclick="navigator.clipboard.writeText('${info.video_url}').then(()=>{this.textContent='宸插鍒?;setTimeout(()=>this.textContent='澶嶅埗閾炬帴',1500)})">
+                            <button class="download-btn download-btn-copy" onclick="navigator.clipboard.writeText('${info.video_url}').then(()=>{this.textContent='已复制';setTimeout(()=>this.textContent='复制链接',1500)})">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                澶嶅埗閾炬帴
+                                复制链接
                             </button>
                         ` : ''}
                     </div>
@@ -1345,7 +1351,7 @@
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // 鈹€鈹€鈹€ Render batch results 鈹€鈹€鈹€
+    // ─── Render batch results ───
     function renderBatchResults() {
         const list = document.getElementById('batchList');
         const downloadAllBtn = document.getElementById('batchDownloadAllBtn');
@@ -1363,9 +1369,9 @@
         ` : '';
 
         list.innerHTML = progressHTML + batchResults.map((item, i) => {
-            const statusLabels = { pending: '绛夊緟涓?, parsing: '瑙ｆ瀽涓?, success: '宸茶В鏋?, error: '澶辫触' };
+            const statusLabels = { pending: '等待中', parsing: '解析中', success: '已解析', error: '失败' };
             const statusClass = item.status === 'parsing' ? 'pending' : item.status;
-            const title = item.data?.title || item.url || `瑙嗛 ${i + 1}`;
+            const title = item.data?.title || item.url || `视频 ${i + 1}`;
             const cover = item.data?.cover || '';
             const author = item.data?.author || '';
             const safeName = (title).replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || `video_${i+1}`;
@@ -1381,21 +1387,21 @@
                     <span class="batch-item-status ${statusClass}">${statusLabels[item.status] || item.status}</span>
                     <div class="batch-item-actions">
                         ${item.status === 'success' && downloadUrl ? `
-                            <a href="${downloadUrl}" class="batch-item-btn" title="涓嬭浇瑙嗛">
+                            <a href="${downloadUrl}" class="batch-item-btn" title="下载视频">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             </a>
-                            <button class="batch-item-btn" onclick="navigator.clipboard.writeText('${item.data.video_url}')" title="澶嶅埗閾炬帴">
+                            <button class="batch-item-btn" onclick="navigator.clipboard.writeText('${item.data.video_url}')" title="复制链接">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                             </button>
                         ` : ''}
-                        ${item.status === 'error' ? `<span class="batch-item-btn" style="cursor:default;font-size:10px;">${escapeHtml(item.error || '澶辫触')}</span>` : ''}
+                        ${item.status === 'error' ? `<span class="batch-item-btn" style="cursor:default;font-size:10px;">${escapeHtml(item.error || '失败')}</span>` : ''}
                     </div>
                 </div>
             `;
         }).join('');
     }
 
-    // 鈹€鈹€鈹€ Batch download all 鈹€鈹€鈹€
+    // ─── Batch download all ───
     document.getElementById('batchDownloadAllBtn').addEventListener('click', () => {
         const successItems = batchResults.filter(r => r.status === 'success');
         if (successItems.length === 0) return;
@@ -1408,7 +1414,7 @@
 
         const downloadAllBtn = document.getElementById('batchDownloadAllBtn');
         downloadAllBtn.disabled = true;
-        downloadAllBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 鎵撳寘涓?..';
+        downloadAllBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 打包中...';
 
         fetch(`${API_BASE}/api/batch-download`, {
             method: 'POST',
@@ -1427,15 +1433,15 @@
             });
         })
         .catch(err => {
-            showStatus('鎵撳寘涓嬭浇澶辫触', 'error');
+            showStatus('打包下载失败', 'error');
         })
         .finally(() => {
             downloadAllBtn.disabled = false;
-            downloadAllBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 涓嬭浇鍏ㄩ儴 (ZIP)';
+            downloadAllBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 下载全部 (ZIP)';
         });
     });
 
-    // 鈹€鈹€鈹€ Status messages 鈹€鈹€鈹€
+    // ─── Status messages ───
     function showStatus(msg, type) {
         const icon = type === 'error'
             ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
@@ -1444,7 +1450,7 @@
     }
     function hideStatus() { statusMessage.innerHTML = ''; }
 
-    // 鈹€鈹€鈹€ Loading state 鈹€鈹€鈹€
+    // ─── Loading state ───
     function setLoading(loading) {
         parseBtn.disabled = loading;
         parseBtn.classList.toggle('loading', loading);
@@ -1462,7 +1468,7 @@
         }
     }
 
-    // 鈹€鈹€鈹€ History 鈹€鈹€鈹€
+    // ─── History ───
     function addToHistory(info) {
         history.unshift({
             title: info.title,
@@ -1490,7 +1496,7 @@
         historyList.innerHTML = history.map(item => `
             <div class="history-item" onclick="navigator.clipboard.writeText('${item.url || ''}')">
                 <div class="history-item-platform">${platformIcons[item.platform] || ''}</div>
-                <span class="history-item-title">${escapeHtml(item.title || '鏈煡鏍囬')}</span>
+                <span class="history-item-title">${escapeHtml(item.title || '未知标题')}</span>
                 <span class="history-item-time">${formatTime(item.time)}</span>
             </div>
         `).join('');
@@ -1502,7 +1508,7 @@
         renderHistory();
     });
 
-    // 鈹€鈹€鈹€ Utilities 鈹€鈹€鈹€
+    // ─── Utilities ───
     function escapeHtml(str) {
         const div = document.createElement('div');
         div.textContent = str;
