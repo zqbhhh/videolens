@@ -1287,10 +1287,32 @@
     }
 
     // ─── Show single result ───
+    // ─── Force download file via fetch+blob ───
+    async function downloadFile(url, filename) {
+        showStatus('正在下载，请稍候...', 'info');
+        try {
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const blob = await resp.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+            hideStatus();
+        } catch (err) {
+            showStatus('下载失败: ' + err.message, 'error');
+        }
+    }
+
     function showSingleResult(info) {
         const platformNames = { douyin: '抖音', kuaishou: '快手', xiaohongshu: '小红书', bilibili: 'B站' };
         const safeName = (info.title || 'video').replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || 'video';
-        const downloadUrl = `${API_BASE}/api/download?url=${encodeURIComponent(info.video_url)}&filename=${encodeURIComponent(safeName)}`;
+        const videoDownloadUrl = `${API_BASE}/api/download?url=${encodeURIComponent(info.video_url)}&filename=${encodeURIComponent(safeName)}`;
+        const audioDownloadUrl = info.music_url ? `${API_BASE}/api/download?url=${encodeURIComponent(info.music_url)}&filename=${encodeURIComponent(info.music_title || safeName)}&type=audio` : '';
 
         resultSection.innerHTML = `
             <div class="result-card">
@@ -1323,15 +1345,15 @@
                     </div>
                     <div class="result-actions">
                         ${info.video_url ? `
-                            <a href="${downloadUrl}" class="download-btn download-btn-video">
+                            <button class="download-btn download-btn-video" onclick="downloadFile('${videoDownloadUrl}','${safeName}.mp4')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                 下载视频
-                            </a>
+                            </button>
                             ${info.music_url ? `
-                                <a href="${API_BASE}/api/download?url=${encodeURIComponent(info.music_url)}&filename=${encodeURIComponent(info.music_title || safeName)}&type=audio" class="download-btn download-btn-audio">
+                                <button class="download-btn download-btn-audio" onclick="downloadFile('${audioDownloadUrl}','${(info.music_title || safeName).replace(/[^\w\u4e00-\u9fff\-_. ]/g,"")}.mp3')">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
                                     下载音频
-                                </a>
+                                </button>
                             ` : `
                                 <span class="download-btn download-btn-audio" style="opacity:0.4;cursor:not-allowed;">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
@@ -1387,9 +1409,9 @@
                     <span class="batch-item-status ${statusClass}">${statusLabels[item.status] || item.status}</span>
                     <div class="batch-item-actions">
                         ${item.status === 'success' && downloadUrl ? `
-                            <a href="${downloadUrl}" class="batch-item-btn" title="下载视频">
+                            <button class="batch-item-btn" onclick="downloadFile('${downloadUrl}','${safeName}.mp4')" title="下载视频">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            </a>
+                            </button>
                             <button class="batch-item-btn" onclick="navigator.clipboard.writeText('${item.data.video_url}')" title="复制链接">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                             </button>
