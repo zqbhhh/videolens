@@ -1289,37 +1289,38 @@
     // ─── Show single result ───
     // ─── Force download file via fetch+blob ───
     window.downloadFile = async function(videoUrl, filename, type) {
-        showStatus('正在获取下载链接...', 'info');
+        showStatus('正在下载，请稍候...', 'info');
         try {
-            // Ask backend to resolve the final CDN URL
-            const apiUrl = `${API_BASE}/api/download?url=${encodeURIComponent(videoUrl)}&filename=${encodeURIComponent(filename)}${type ? '&type=' + type : ''}`;
-            const resp = await fetch(apiUrl);
-            const result = await resp.json();
-
-            if (result.code === 0 && result.data && result.data.url) {
-                // Use hidden <a> tag to trigger download from CDN
-                const a = document.createElement('a');
-                a.href = result.data.url;
-                a.download = result.data.filename || filename;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                showStatus('下载已开始', 'success');
-            } else {
-                // Fallback: open video URL directly
-                const a = document.createElement('a');
-                a.href = videoUrl;
-                a.target = '_blank';
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                showStatus('已打开视频链接，请右键另存为下载', 'success');
-            }
+            // Fetch video directly (may fail due to CORS, but worth trying)
+            const resp = await fetch(videoUrl, {
+                method: 'GET',
+                mode: 'cors',
+                credentials: 'omit'
+            });
+            
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            
+            const blob = await resp.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+            showStatus('下载完成', 'success');
         } catch (err) {
-            showStatus('下载失败: ' + err.message, 'error');
+            // Fallback: open in new tab for manual download
+            showStatus('直接下载失败，正在打开视频页面...', 'info');
+            const a = document.createElement('a');
+            a.href = videoUrl;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showStatus('已打开视频，请右键另存为下载', 'success');
         }
     }
 
