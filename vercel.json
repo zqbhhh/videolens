@@ -1,6 +1,12 @@
 {
   "version": 2,
   "name": "videolens",
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "**/.env*",
+      "maxDuration": 10
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
