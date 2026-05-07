@@ -5,530 +5,770 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VideoLens · 短视频无水印解析</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #FAFAF9;
-            --surface: #FFFFFF;
-            --text-primary: #1A1A1A;
-            --text-secondary: #6B6B6B;
-            --text-tertiary: #A3A3A3;
-            --border: #E8E8E6;
-            --border-hover: #D0D0CE;
-            --accent: #1A1A1A;
-            --accent-light: #F5F5F4;
-            --success: #2D8A56;
-            --success-bg: #ECFDF5;
-            --error: #DC2626;
-            --error-bg: #FEF2F2;
-            --radius: 14px;
-            --radius-sm: 10px;
-            --radius-xs: 7px;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
-            --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-highlight: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glass-blur: blur(20px) saturate(180%);
+            
+            --accent-primary: #00D4FF;
+            --accent-secondary: #7B61FF;
+            --accent-gradient: linear-gradient(135deg, #00D4FF 0%, #7B61FF 50%, #FF61DC 100%);
+            
+            --bg-dark: #0a0a0f;
+            --bg-gradient-1: #0f172a;
+            --bg-gradient-2: #1e1b4b;
+            --bg-gradient-3: #312e81;
+            
+            --text-primary: rgba(255, 255, 255, 0.95);
+            --text-secondary: rgba(255, 255, 255, 0.65);
+            --text-muted: rgba(255, 255, 255, 0.4);
+            
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+            --radius-xl: 40px;
+            
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Noto Sans SC', 'Outfit', -apple-system, sans-serif;
-            background: var(--bg);
+            font-family: 'Noto Sans SC', 'Space Grotesk', -apple-system, sans-serif;
+            background: var(--bg-dark);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Subtle grain texture */
-        body::before {
-            content: '';
+        /* Animated gradient background */
+        .bg-gradient {
             position: fixed;
             inset: 0;
-            opacity: 0.018;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
+            z-index: -2;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(123, 97, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 30% at 50% 80%, rgba(255, 97, 220, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 50%, var(--bg-dark) 100%);
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #7B61FF, #00D4FF);
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #FF61DC, #7B61FF);
+            bottom: 10%;
+            left: -100px;
+            animation-delay: -7s;
+        }
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #00D4FF, #10b981);
+            top: 40%;
+            right: 10%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 30px) scale(1.02); }
         }
 
         /* ─── Navigation ─── */
         nav {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 100;
-            padding: 0 40px;
-            height: 64px;
+            padding: 12px 24px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: rgba(250, 250, 249, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid transparent;
-            transition: border-color var(--transition);
+            gap: 32px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--glass-shadow);
+            transition: all var(--transition-normal);
         }
-        nav.scrolled { border-bottom-color: var(--border); }
+        nav:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--glass-highlight);
+        }
 
         .nav-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
             color: var(--text-primary);
         }
         .nav-logo-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--text-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 14px;
-            font-weight: 600;
-            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
         }
         .nav-logo-text {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             font-weight: 600;
             font-size: 18px;
             letter-spacing: -0.5px;
         }
         .nav-links {
             display: flex;
-            gap: 32px;
+            gap: 28px;
             list-style: none;
         }
         .nav-links a {
             text-decoration: none;
             color: var(--text-secondary);
             font-size: 14px;
-            font-weight: 400;
-            transition: color var(--transition);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            position: relative;
         }
-        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: width var(--transition-fast);
+            border-radius: 2px;
+        }
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
 
         /* ─── Hero ─── */
         .hero {
-            padding: 140px 40px 80px;
+            padding: 160px 40px 60px;
             text-align: center;
-            max-width: 720px;
+            max-width: 800px;
             margin: 0 auto;
         }
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
+            gap: 8px;
+            padding: 8px 20px;
             border-radius: 100px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            font-size: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            font-size: 13px;
             color: var(--text-secondary);
-            margin-bottom: 28px;
-            animation: fadeUp 0.6s ease both;
+            margin-bottom: 32px;
+            animation: fadeUp 0.8s ease both;
         }
         .hero-badge-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: var(--success);
+            box-shadow: 0 0 10px var(--success);
             animation: pulse 2s ease-in-out infinite;
         }
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
         }
         .hero h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 52px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 56px;
             font-weight: 700;
             letter-spacing: -2px;
-            line-height: 1.15;
-            margin-bottom: 18px;
-            animation: fadeUp 0.6s ease 0.1s both;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            animation: fadeUp 0.8s ease 0.1s both;
         }
         .hero h1 span {
-            background: linear-gradient(135deg, #1A1A1A 0%, #555 100%);
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .hero p {
-            font-size: 17px;
+            font-size: 18px;
             color: var(--text-secondary);
-            max-width: 480px;
+            max-width: 500px;
             margin: 0 auto;
-            font-weight: 300;
-            animation: fadeUp 0.6s ease 0.2s both;
+            font-weight: 400;
+            animation: fadeUp 0.8s ease 0.2s both;
         }
 
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(16px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         /* ─── Parser Section ─── */
         .parser-section {
-            max-width: 640px;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 0 40px 40px;
-            animation: fadeUp 0.6s ease 0.3s both;
+            padding: 0 40px 60px;
+            animation: fadeUp 0.8s ease 0.3s both;
         }
         .parser-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 28px;
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow var(--transition), border-color var(--transition);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--glass-shadow);
+            transition: all var(--transition-normal);
         }
-        .parser-card:focus-within {
-            border-color: var(--border-hover);
-            box-shadow: var(--shadow-md);
+        .parser-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--glass-highlight);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Mode toggle */
+        .mode-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            width: fit-content;
+        }
+        .mode-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .mode-btn.active {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+        .mode-btn:hover:not(.active) {
+            color: var(--text-primary);
         }
 
         /* Platform tabs */
         .platform-tabs {
             display: flex;
-            gap: 6px;
+            gap: 12px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .platform-tab {
-            flex: 1;
-            padding: 10px 8px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xs);
-            background: transparent;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            transition: all var(--transition);
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-family: inherit;
-        }
-        .platform-tab:hover {
-            border-color: var(--border-hover);
-            background: var(--accent-light);
-        }
-        .platform-tab.active {
-            border-color: var(--accent);
-            background: var(--accent);
-            color: white;
-        }
-        .platform-tab svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Input area */
-        .input-group {
-            position: relative;
-        }
-        .input-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: stretch;
-        }
-        .url-input {
-            flex: 1;
-            padding: 14px 18px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-family: inherit;
-            color: var(--text-primary);
-            background: var(--bg);
-            outline: none;
-            transition: all var(--transition);
-        }
-        .url-input::placeholder { color: var(--text-tertiary); }
-        .url-input:focus {
-            border-color: var(--accent);
-            background: var(--surface);
-        }
-        .parse-btn {
-            padding: 14px 28px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 500;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all var(--transition);
-            white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 8px;
+            padding: 10px 18px;
+            border: 1px solid var(--glass-border);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
         }
-        .parse-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-        .parse-btn:active { transform: translateY(0); }
+        .platform-tab:hover {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+        }
+        .platform-tab.active {
+            background: var(--accent-gradient);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+        .platform-tab svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Input area */
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        #urlInput {
+            width: 100%;
+            padding: 16px 56px 16px 20px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            color: var(--text-primary);
+            resize: none;
+            transition: all var(--transition-fast);
+            font-family: inherit;
+        }
+        #urlInput::placeholder {
+            color: var(--text-muted);
+        }
+        #urlInput:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+        #urlInput.batch-mode {
+            min-height: 120px;
+        }
+        .paste-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+        }
+        .paste-btn:hover {
+            background: var(--glass-highlight);
+            color: var(--text-primary);
+        }
+
+        /* Parse button */
+        .parse-btn {
+            width: 100%;
+            padding: 16px 28px;
+            border: none;
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all var(--transition-fast);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+        .parse-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+        .parse-btn:active {
+            transform: translateY(0);
+        }
         .parse-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
         .parse-btn svg {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.3s ease;
+            width: 20px;
+            height: 20px;
         }
         .parse-btn.loading svg {
-            animation: spin 0.8s linear infinite;
+            animation: spin 1s linear infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
-        .input-hint {
-            margin-top: 10px;
-            font-size: 12px;
-            color: var(--text-tertiary);
-            display: flex;
+        /* Mode hint */
+        .mode-hint {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* ─── Status Messages ─── */
+        .status-message {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            display: none;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
+            animation: fadeUp 0.3s ease;
         }
-        .input-hint svg { width: 14px; height: 14px; }
+        .status-message.show {
+            display: flex;
+        }
+        .status-message.success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+        .status-message.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--error);
+        }
+        .status-message.info {
+            background: rgba(0, 212, 255, 0.15);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: var(--accent-primary);
+        }
 
-        /* ─── Result Section ─── */
+        /* ─── Results ─── */
         .result-section {
-            max-width: 640px;
-            margin: 0 auto;
-            padding: 0 40px 80px;
+            max-width: 700px;
+            margin: 32px auto;
+            padding: 0 40px;
+            display: none;
         }
+        .result-section.show {
+            display: block;
+            animation: fadeUp 0.5s ease;
+        }
+
         .result-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: var(--shadow-md);
-            animation: resultIn 0.5s ease both;
-        }
-        @keyframes resultIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            box-shadow: var(--glass-shadow);
         }
 
         .result-video {
             position: relative;
-            aspect-ratio: 9/12;
-            max-height: 420px;
-            background: #000;
-            overflow: hidden;
+            aspect-ratio: 9/16;
+            max-height: 500px;
+            background: rgba(0, 0, 0, 0.3);
         }
-        .result-video video {
+        .result-video video,
+        .result-video img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
-        .result-video .no-video {
-            position: absolute;
-            inset: 0;
+        .no-video {
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            color: var(--text-muted);
             gap: 12px;
-            color: rgba(255,255,255,0.5);
-            font-size: 13px;
         }
-        .result-video .no-video svg { width: 48px; height: 48px; opacity: 0.3; }
+        .no-video svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.5;
+        }
 
         .result-info {
-            padding: 24px 28px;
+            padding: 24px;
         }
         .result-title {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
             line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
         .result-meta {
             display: flex;
             gap: 16px;
-            font-size: 12px;
-            color: var(--text-tertiary);
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .result-meta-item {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
         }
-        .result-meta-item svg { width: 14px; height: 14px; }
+        .result-meta-item svg {
+            width: 16px;
+            height: 16px;
+        }
 
         .result-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .download-btn {
-            flex: 1;
-            padding: 13px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
             border-radius: var(--radius-sm);
             font-size: 14px;
             font-weight: 500;
-            font-family: inherit;
             cursor: pointer;
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            transition: all var(--transition-fast);
             text-decoration: none;
         }
-        .download-btn svg { width: 16px; height: 16px; }
-        .download-btn-primary {
-            background: var(--accent);
+        .download-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        .download-btn-video {
+            background: var(--accent-gradient);
             color: white;
-            border: none;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
         }
-        .download-btn-primary:hover { opacity: 0.85; }
-        .download-btn-secondary {
-            background: transparent;
+        .download-btn-video:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+        .download-btn-audio {
+            background: rgba(123, 97, 255, 0.2);
+            border: 1px solid rgba(123, 97, 255, 0.4);
+            color: #a78bfa;
+        }
+        .download-btn-audio:hover {
+            background: rgba(123, 97, 255, 0.3);
+        }
+        .download-btn-copy {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+        }
+        .download-btn-copy:hover {
+            background: var(--glass-highlight);
             color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-        .download-btn-secondary:hover {
-            border-color: var(--border-hover);
-            background: var(--accent-light);
         }
 
-        /* ─── Error / Status ─── */
-        .status-message {
-            max-width: 640px;
-            margin: 0 auto;
+        /* ─── Batch Results ─── */
+        .batch-section {
+            max-width: 700px;
+            margin: 32px auto;
             padding: 0 40px;
+            display: none;
         }
-        .status-msg {
-            padding: 16px 20px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
+        .batch-section.show {
+            display: block;
+            animation: fadeUp 0.5s ease;
+        }
+        .batch-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .batch-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .batch-download-all {
             display: flex;
             align-items: center;
-            gap: 10px;
-            animation: fadeUp 0.4s ease both;
+            gap: 8px;
+            padding: 10px 18px;
+            border: none;
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
         }
-        .status-msg svg { width: 18px; height: 18px; flex-shrink: 0; }
-        .status-msg.error {
-            background: var(--error-bg);
-            color: var(--error);
-            border: 1px solid #FECACA;
+        .batch-download-all:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
         }
-        .status-msg.success {
-            background: var(--success-bg);
-            color: var(--success);
-            border: 1px solid #A7F3D0;
+        .batch-download-all:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        /* ─── Features Section ─── */
-        .features {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 40px 100px;
+        .batch-list {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
         }
-        .features-header {
-            text-align: center;
-            margin-bottom: 48px;
+        .batch-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--glass-border);
+            transition: background var(--transition-fast);
         }
-        .features-header h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 32px;
-            font-weight: 600;
-            letter-spacing: -1px;
-            margin-bottom: 10px;
+        .batch-item:last-child {
+            border-bottom: none;
         }
-        .features-header p {
-            color: var(--text-secondary);
-            font-size: 15px;
+        .batch-item:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        .batch-item-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            background: rgba(0, 0, 0, 0.3);
         }
-        .feature-card {
-            padding: 28px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--surface);
-            transition: all var(--transition);
+        .batch-item-info {
+            flex: 1;
+            min-width: 0;
         }
-        .feature-card:hover {
-            border-color: var(--border-hover);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
+        .batch-item-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
         }
-        .feature-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-xs);
-            background: var(--accent-light);
+        .batch-item-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .batch-item-status {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+        .batch-item-status.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+        .batch-item-status.success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+        .batch-item-status.error {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--error);
+        }
+        .batch-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .batch-item-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 16px;
-        }
-        .feature-icon svg { width: 20px; height: 20px; color: var(--text-primary); }
-        .feature-card h3 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        .feature-card p {
-            font-size: 13px;
             color: var(--text-secondary);
-            line-height: 1.6;
+            transition: all var(--transition-fast);
         }
-
-        /* ─── Footer ─── */
-        footer {
-            text-align: center;
-            padding: 32px 40px;
-            border-top: 1px solid var(--border);
-            font-size: 12px;
-            color: var(--text-tertiary);
+        .batch-item-btn:hover {
+            background: var(--glass-highlight);
+            color: var(--text-primary);
         }
 
         /* ─── History ─── */
         .history-section {
-            max-width: 640px;
-            margin: 0 auto;
-            padding: 0 40px 40px;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 40px;
         }
         .history-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 16px;
         }
-        .history-header h3 {
-            font-size: 14px;
-            font-weight: 500;
+        .history-title {
+            font-size: 16px;
+            font-weight: 600;
             color: var(--text-secondary);
         }
         .history-clear {
-            font-size: 12px;
-            color: var(--text-tertiary);
+            font-size: 13px;
+            color: var(--text-muted);
             background: none;
             border: none;
             cursor: pointer;
-            font-family: inherit;
-            transition: color var(--transition);
+            transition: color var(--transition-fast);
         }
-        .history-clear:hover { color: var(--text-primary); }
+        .history-clear:hover {
+            color: var(--error);
+        }
         .history-list {
             display: flex;
             flex-direction: column;
@@ -539,1030 +779,638 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xs);
-            background: var(--surface);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all var(--transition);
-            font-size: 13px;
+            transition: all var(--transition-fast);
         }
         .history-item:hover {
-            border-color: var(--border-hover);
-            background: var(--accent-light);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--glass-highlight);
         }
-        .history-item-platform {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            background: var(--accent-light);
+        .history-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+            font-size: 16px;
         }
-        .history-item-platform svg { width: 14px; height: 14px; }
-        .history-item-title {
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: var(--text-primary);
-        }
-        .history-item-time {
-            font-size: 11px;
-            color: var(--text-tertiary);
-            flex-shrink: 0;
-        }
-
-        /* ─── Input Toolbar ─── */
-        .input-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-        .mode-toggle {
-            display: flex;
-            gap: 4px;
-            background: var(--accent-light);
-            padding: 3px;
-            border-radius: var(--radius-xs);
-        }
-        .mode-btn {
-            padding: 5px 14px;
-            border: none;
-            border-radius: 6px;
-            background: transparent;
-            font-size: 12px;
-            font-weight: 500;
-            font-family: inherit;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-        .mode-btn.active {
-            background: var(--surface);
-            color: var(--text-primary);
-            box-shadow: var(--shadow-sm);
-        }
-        .mode-hint {
-            font-size: 12px;
-            color: var(--text-tertiary);
-        }
-
-        /* ─── Paste Button ─── */
-        .paste-btn {
-            padding: 12px 14px;
-            background: var(--accent-light);
-            border: 1px solid var(--border);
-            border-right: none;
-            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .paste-btn:hover { color: var(--text-primary); background: var(--bg); }
-        .paste-btn svg { width: 16px; height: 16px; }
-
-        .input-wrapper .url-input {
-            border-radius: 0;
-            border-left: none;
-            border-right: none;
-        }
-        .input-wrapper .parse-btn {
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            flex-shrink: 0;
-        }
-        .input-wrapper {
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: border-color var(--transition);
-        }
-        .input-wrapper:focus-within { border-color: var(--accent); }
-
-        /* ─── URL textarea (batch mode) ─── */
-        .url-input {
-            resize: none;
-            overflow-y: auto;
-            max-height: 120px;
-            transition: all var(--transition);
-        }
-        .url-input.batch-mode {
-            border-radius: 0;
-            border: none;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            margin-top: -1px;
-        }
-
-        /* ─── Download buttons ─── */
-        .result-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-        }
-        .download-btn {
-            padding: 13px 16px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 500;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-            border: none;
-        }
-        .download-btn svg { width: 16px; height: 16px; }
-        .download-btn-video {
-            background: var(--accent);
-            color: white;
-        }
-        .download-btn-video:hover { opacity: 0.85; }
-        .download-btn-audio {
-            background: var(--accent-light);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-        .download-btn-audio:hover { border-color: var(--border-hover); }
-        .download-btn-copy {
-            background: var(--accent-light);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-        .download-btn-copy:hover { border-color: var(--border-hover); }
-
-        /* ─── Batch Section ─── */
-        .batch-section {
-            max-width: 640px;
-            margin: 0 auto;
-            padding: 0 40px 40px;
-        }
-        .batch-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-        .batch-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-        .batch-title svg { width: 18px; height: 18px; color: var(--success); }
-        .batch-download-all-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 9px 16px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 500;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-        .batch-download-all-btn:hover { opacity: 0.85; }
-        .batch-download-all-btn svg { width: 15px; height: 15px; }
-        .batch-download-all-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .batch-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .batch-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            transition: all var(--transition);
-        }
-        .batch-item:hover { border-color: var(--border-hover); }
-        .batch-item-thumb {
-            width: 48px;
-            height: 64px;
-            border-radius: 6px;
-            object-fit: cover;
-            background: var(--accent-light);
-            flex-shrink: 0;
-        }
-        .batch-item-info {
+        .history-item-info {
             flex: 1;
             min-width: 0;
         }
-        .batch-item-title {
-            font-size: 13px;
+        .history-item-title {
+            font-size: 14px;
             font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-bottom: 2px;
         }
-        .batch-item-meta {
-            font-size: 11px;
-            color: var(--text-tertiary);
-        }
-        .batch-item-status {
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 100px;
-            flex-shrink: 0;
-        }
-        .batch-item-status.pending { background: var(--accent-light); color: var(--text-secondary); }
-        .batch-item-status.success { background: var(--success-bg); color: var(--success); }
-        .batch-item-status.error { background: var(--error-bg); color: var(--error); }
-        .batch-item-actions {
-            display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-        .batch-item-btn {
-            padding: 7px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-        .batch-item-btn:hover { background: var(--accent-light); }
-        .batch-item-btn svg { width: 13px; height: 13px; }
-
-        /* ─── Progress bar ─── */
-        .batch-progress {
-            margin-bottom: 16px;
-        }
-        .batch-progress-bar {
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-bottom: 6px;
-        }
-        .batch-progress-fill {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-        .batch-progress-text {
+        .history-item-time {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--text-muted);
+        }
+
+        /* ─── Footer ─── */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
         }
 
         /* ─── Responsive ─── */
-        @media (max-width: 768px) {
-            nav { padding: 0 20px; }
-            .nav-links { display: none; }
-            .hero { padding: 120px 20px 60px; }
-            .hero h1 { font-size: 36px; letter-spacing: -1px; }
-            .hero p { font-size: 15px; }
-            .parser-section, .result-section, .status-message, .history-section { padding-left: 20px; padding-right: 20px; }
-            .features { padding: 40px 20px 80px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .platform-tabs { flex-wrap: wrap; }
-            .platform-tab { min-width: calc(50% - 3px); }
-            .input-wrapper { flex-direction: column; }
-            .parse-btn { justify-content: center; }
-            .result-actions { flex-direction: column; }
+        @media (max-width: 640px) {
+            nav {
+                top: 12px;
+                padding: 10px 16px;
+                gap: 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero {
+                padding: 120px 24px 40px;
+            }
+            .hero h1 {
+                font-size: 36px;
+            }
+            .parser-section,
+            .result-section,
+            .batch-section,
+            .history-section {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .platform-tabs {
+                gap: 8px;
+            }
+            .platform-tab {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+            .result-actions {
+                flex-direction: column;
+            }
+            .download-btn {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Background effects -->
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-<!-- Navigation -->
-<nav id="navbar">
-    <a href="#" class="nav-logo">
-        <div class="nav-logo-icon">VL</div>
-        <span class="nav-logo-text">VideoLens</span>
-    </a>
-    <ul class="nav-links">
-        <li><a href="#parser">解析</a></li>
-        <li><a href="#features">特性</a></li>
-    </ul>
-</nav>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-icon">VL</div>
+            <span class="nav-logo-text">VideoLens</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#parse">解析</a></li>
+            <li><a href="#features">特性</a></li>
+        </ul>
+    </nav>
 
-<!-- Hero -->
-<section class="hero">
-    <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        支持抖音 · 快手 · 小红书 · B站
-    </div>
-    <h1><span>粘贴链接，获取<br>无水印视频</span></h1>
-    <p>支持主流短视频平台，一键解析原始高清视频，无水印下载保存</p>
-</section>
-
-<!-- Parser -->
-<section class="parser-section" id="parser">
-    <div class="parser-card">
-        <div class="platform-tabs">
-            <button class="platform-tab active" data-platform="douyin" title="抖音">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
-                </svg>
-                抖音
-            </button>
-            <button class="platform-tab" data-platform="kuaishou" title="快手">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                </svg>
-                快手
-            </button>
-            <button class="platform-tab" data-platform="xiaohongshu" title="小红书">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-                小红书
-            </button>
-            <button class="platform-tab" data-platform="bilibili" title="B站">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="2" y="4" width="20" height="16" rx="3"/>
-                    <path d="M8 2v4M16 2v4M2 10h20"/>
-                </svg>
-                B站
-            </button>
+    <!-- Hero -->
+    <section class="hero" id="parse">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span>支持抖音、快手、小红书、B站</span>
         </div>
-        <div class="input-group">
-            <div class="input-toolbar">
-                <div class="mode-toggle">
-                    <button class="mode-btn active" data-mode="single" id="modeSingle">单个解析</button>
-                    <button class="mode-btn" data-mode="batch" id="modeBatch">批量解析</button>
-                </div>
-                <div class="mode-hint" id="modeHint">粘贴链接自动解析</div>
+        <h1>短视频<span>无水印</span>解析</h1>
+        <p>粘贴链接，一键解析高清无水印视频</p>
+    </section>
+
+    <!-- Parser -->
+    <section class="parser-section">
+        <div class="parser-card">
+            <!-- Mode Toggle -->
+            <div class="mode-toggle">
+                <button class="mode-btn" id="modeSingle">单个</button>
+                <button class="mode-btn active" id="modeBatch">批量</button>
             </div>
+
+            <!-- Platform Tabs -->
+            <div class="platform-tabs">
+                <button class="platform-tab active" data-platform="douyin">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    抖音
+                </button>
+                <button class="platform-tab" data-platform="kuaishou">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    快手
+                </button>
+                <button class="platform-tab" data-platform="xiaohongshu">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    小红书
+                </button>
+                <button class="platform-tab" data-platform="bilibili">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    B站
+                </button>
+            </div>
+
+            <!-- Input -->
             <div class="input-wrapper">
-                <textarea class="url-input" id="urlInput" placeholder="粘贴视频分享链接，如 https://v.douyin.com/..." rows="1" autocomplete="off"></textarea>
+                <textarea id="urlInput" placeholder="粘贴多个视频链接，每行一个...
+例如：
+https://v.douyin.com/xxx1
+https://v.douyin.com/xxx2" rows="4"></textarea>
                 <button class="paste-btn" id="pasteBtn" title="粘贴">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                    </svg>
-                </button>
-                <button class="parse-btn" id="parseBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="parse-icon">
-                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
-                        <path d="M21 3v5h-5"/>
-                    </svg>
-                    <span class="parse-text">解析</span>
-                    <span class="parse-loading" style="display:none;">解析中...</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
                 </button>
             </div>
-            <div class="input-hint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 16v-4M12 8h.01"/>
-                </svg>
-                支持分享口令、短链接、完整链接，自动识别平台
-            </div>
+
+            <!-- Parse Button -->
+            <button class="parse-btn" id="parseBtn">
+                <svg class="parse-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                <svg class="parse-loading" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+                <span class="parse-text">开始解析</span>
+            </button>
+
+            <div class="mode-hint" id="modeHint">一行一个链接，支持多个</div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Status Message -->
-<div class="status-message" id="statusMessage"></div>
+    <!-- Status -->
+    <div class="status-message" id="statusMessage"></div>
 
-<!-- Single Result -->
-<div class="result-section" id="resultSection" style="display:none;"></div>
+    <!-- Result -->
+    <section class="result-section" id="resultSection"></section>
 
-<!-- Batch Results -->
-<div class="batch-section" id="batchSection" style="display:none;">
-    <div class="batch-header">
-        <div class="batch-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            批量解析完成
-        </div>
-        <div class="batch-actions">
-            <button class="batch-download-all-btn" id="batchDownloadAllBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                下载全部 (ZIP)
+    <!-- Batch -->
+    <section class="batch-section" id="batchSection">
+        <div class="batch-header">
+            <div class="batch-title">批量解析结果</div>
+            <button class="batch-download-all" id="batchDownloadAllBtn" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                下载全部
             </button>
         </div>
-    </div>
-    <div class="batch-list" id="batchList"></div>
-</div>
+        <div class="batch-list" id="batchList"></div>
+    </section>
 
-<!-- History -->
-<div class="history-section" id="historySection" style="display:none;">
-    <div class="history-header">
-        <h3>解析历史</h3>
-        <button class="history-clear" id="clearHistory">清空</button>
-    </div>
-    <div class="history-list" id="historyList"></div>
-</div>
-
-<!-- Features -->
-<section class="features" id="features">
-    <div class="features-header">
-        <h2>为什么选择 VideoLens</h2>
-        <p>简洁、快速、安全</p>
-    </div>
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                </svg>
-            </div>
-            <h3>极速解析</h3>
-            <p>先进的解析引擎，秒级响应，粘贴链接即可获取无水印视频</p>
+    <!-- History -->
+    <section class="history-section" id="historySection" style="display:none">
+        <div class="history-header">
+            <div class="history-title">解析历史</div>
+            <button class="history-clear" id="clearHistory">清空</button>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-            </div>
-            <h3>隐私安全</h3>
-            <p>不存储任何视频数据，所有解析在服务端即时完成，保护你的隐私</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                    <line x1="8" y1="21" x2="16" y2="21"/>
-                    <line x1="12" y1="17" x2="12" y2="21"/>
-                </svg>
-            </div>
-            <h3>多端适配</h3>
-            <p>支持手机、平板、电脑等设备，随时随地解析你喜欢的视频</p>
-        </div>
-    </div>
-</section>
+        <div class="history-list" id="historyList"></div>
+    </section>
 
-<!-- Footer -->
-<footer>
-    VideoLens · 仅供学习交流使用，请勿用于商业用途
-</footer>
+    <!-- Footer -->
+    <footer id="features">
+        <p>VideoLens · 短视频无水印解析工具</p>
+        <p style="margin-top:8px">支持抖音、快手、小红书、B站</p>
+    </footer>
 
-<script>
-(function() {
-    'use strict';
+    <script>
+    (function() {
+        'use strict';
 
-    const API_BASE = '';  // 同域部署，使用相对路径
-    let currentPlatform = 'douyin';
-    let history = JSON.parse(localStorage.getItem('videolens_history') || '[]');
+        const API_BASE = '';
+        let currentPlatform = 'douyin';
+        let currentMode = 'batch';
+        let history = JSON.parse(localStorage.getItem('videolens_history') || '[]');
 
-    // DOM Elements
-    const urlInput = document.getElementById('urlInput');
-    const parseBtn = document.getElementById('parseBtn');
-    const resultSection = document.getElementById('resultSection');
-    const statusMessage = document.getElementById('statusMessage');
-    const historySection = document.getElementById('historySection');
-    const historyList = document.getElementById('historyList');
-    const clearHistoryBtn = document.getElementById('clearHistory');
-    const navbar = document.getElementById('navbar');
+        // DOM elements
+        const navbar = document.getElementById('navbar');
+        const urlInput = document.getElementById('urlInput');
+        const parseBtn = document.getElementById('parseBtn');
+        const resultSection = document.getElementById('resultSection');
+        const batchSection = document.getElementById('batchSection');
+        const batchList = document.getElementById('batchList');
+        const batchDownloadAllBtn = document.getElementById('batchDownloadAllBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const historySection = document.getElementById('historySection');
+        const historyList = document.getElementById('historyList');
 
-    // Platform detection patterns
-    const platformPatterns = {
-        douyin: /douyin|抖音|iesdouyin|v\.douyin/i,
-        kuaishou: /kuaishou|快手|v\.kuaishou|v\.kwai/i,
-        xiaohongshu: /xiaohongshu|小红书|xhslink/i,
-        bilibili: /bilibili|b站|b23\.tv/i
-    };
-
-    // ─── Extract URL from share text (e.g. "7.48 Y@z.Gi ... https://v.douyin.com/xxx/ 复制此链接...") ───
-    function extractUrl(text) {
-        // Match http/https URLs
-        const urlMatch = text.match(/https?:\/\/[^\s\u4e00-\u9fff]+/);
-        if (urlMatch) {
-            // Clean trailing punctuation
-            return urlMatch[0].replace(/[，。！？、；：""''）】》]+$/, '');
-        }
-        return text.trim();
-    }
-
-    // ─── Navigation scroll effect ───
-    window.addEventListener('scroll', () => {
-        navbar.classList.toggle('scrolled', window.scrollY > 10);
-    });
-
-    // ─── State ───
-    let currentMode = 'batch'; // 'single' or 'batch'
-    let batchResults = [];
-    let batchProgress = 0;
-    let currentResult = null;
-
-    // ─── Mode toggle ───
-    document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
-    document.getElementById('modeBatch').addEventListener('click', () => switchMode('batch'));
-
-    function switchMode(mode) {
-        currentMode = mode;
-        document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
-        document.getElementById('modeBatch').classList.toggle('active', mode === 'batch');
-        document.getElementById('modeHint').textContent = mode === 'single' ? '粘贴链接自动解析' : '一行一个链接，支持多个';
-
-        const input = document.getElementById('urlInput');
-        if (mode === 'batch') {
-            input.placeholder = '粘贴多个视频链接，每行一个...\n例如：\nhttps://v.douyin.com/xxx1\nhttps://v.douyin.com/xxx2';
-            input.rows = 4;
-            input.classList.add('batch-mode');
-        } else {
-            input.placeholder = '粘贴视频分享链接，如 https://v.douyin.com/...';
-            input.rows = 1;
-            input.classList.remove('batch-mode');
-        }
-
-        // Hide results when switching
-        resultSection.style.display = 'none';
-        batchSection.style.display = 'none';
-        hideStatus();
-    }
-
-    // ─── Paste button ───
-    document.getElementById('pasteBtn').addEventListener('click', async () => {
-        try {
-            const text = await navigator.clipboard.readText();
-            const input = document.getElementById('urlInput');
-            input.value = text;
-            // Auto-trigger parse
-            if (currentMode === 'single') {
-                const cleanUrl = extractUrl(text);
-                if (cleanUrl) handleParse();
-            }
-        } catch (err) {
-            showStatus('无法读取剪贴板，请手动粘贴', 'error');
-        }
-    });
-
-    // ─── Init default mode ───
-    switchMode('batch');
-
-    // ─── Platform tabs ───
-    document.querySelectorAll('.platform-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            currentPlatform = tab.dataset.platform;
+        // Navigation scroll effect
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 10);
         });
-    });
 
-    // ─── Auto-detect platform from URL ───
-    urlInput.addEventListener('input', () => {
-        const url = urlInput.value.trim();
-        if (!url) return;
-        for (const [platform, pattern] of Object.entries(platformPatterns)) {
-            if (pattern.test(url)) {
-                currentPlatform = platform;
-                document.querySelectorAll('.platform-tab').forEach(t => {
-                    t.classList.toggle('active', t.dataset.platform === platform);
-                });
-                break;
-            }
-        }
-    });
+        // Init default mode
+        switchMode('batch');
 
-    // ─── Paste event ───
-    urlInput.addEventListener('paste', () => {
-        setTimeout(() => {
-            const raw = urlInput.value.trim();
-            if (!raw) return;
-            const cleanUrl = extractUrl(raw);
-            if (cleanUrl && cleanUrl !== raw && currentMode === 'single') {
-                urlInput.value = cleanUrl;
-            }
-            handleParse();
-        }, 100);
-    });
+        // Mode toggle
+        document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
+        document.getElementById('modeBatch').addEventListener('click', () => switchMode('batch'));
 
-    // ─── Parse button click ───
-    parseBtn.addEventListener('click', handleParse);
-    urlInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleParse();
-        }
-    });
+        function switchMode(mode) {
+            currentMode = mode;
+            document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
+            document.getElementById('modeBatch').classList.toggle('active', mode === 'batch');
+            document.getElementById('modeHint').textContent = mode === 'single' ? '粘贴链接自动解析' : '一行一个链接，支持多个';
 
-    // ─── Main parse function ───
-    async function handleParse() {
-        if (currentMode === 'batch') {
-            return handleBatchParse();
-        }
-
-        let url = extractUrl(urlInput.value.trim());
-        if (!url) {
-            showStatus('请输入视频链接', 'error');
-            return;
-        }
-
-        setLoading(true);
-        hideStatus();
-        resultSection.style.display = 'none';
-        batchSection.style.display = 'none';
-
-        try {
-            const resp = await fetch(`${API_BASE}/api/parse`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url, platform: currentPlatform })
-            });
-
-            const data = await resp.json();
-
-            if (data.code === 0 && data.data) {
-                currentResult = data.data;
-                showSingleResult(data.data);
-                addToHistory(data.data);
-                showStatus('解析成功', 'success');
+            if (mode === 'batch') {
+                urlInput.placeholder = '粘贴多个视频链接，每行一个...\n例如：\nhttps://v.douyin.com/xxx1\nhttps://v.douyin.com/xxx2';
+                urlInput.rows = 4;
+                urlInput.classList.add('batch-mode');
             } else {
-                showStatus(data.msg || '解析失败，请检查链接是否正确', 'error');
+                urlInput.placeholder = '粘贴视频分享链接，如 https://v.douyin.com/...';
+                urlInput.rows = 1;
+                urlInput.classList.remove('batch-mode');
             }
-        } catch (err) {
-            console.error(err);
-            showStatus('无法连接到服务器，请确认后端服务已启动', 'error');
-        } finally {
-            setLoading(false);
-        }
-    }
 
-    // ─── Batch parse ───
-    async function handleBatchParse() {
-        const raw = urlInput.value.trim();
-        if (!raw) {
-            showStatus('请输入视频链接', 'error');
-            return;
+            resultSection.classList.remove('show');
+            batchSection.classList.remove('show');
+            hideStatus();
         }
 
-        // Extract all URLs
-        const lines = raw.split('\n').map(l => extractUrl(l.trim())).filter(Boolean);
-        if (lines.length === 0) {
-            showStatus('未能从文本中提取到有效的视频链接', 'error');
-            return;
-        }
-        if (lines.length > 20) {
-            showStatus('批量解析最多支持 20 个链接', 'error');
-            return;
-        }
+        // Platform tabs
+        document.querySelectorAll('.platform-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentPlatform = tab.dataset.platform;
+            });
+        });
 
-        setLoading(true);
-        hideStatus();
-        resultSection.style.display = 'none';
+        // Paste button
+        document.getElementById('pasteBtn').addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                urlInput.value = text;
+                if (currentMode === 'single') {
+                    const cleanUrl = extractUrl(text);
+                    if (cleanUrl) handleParse();
+                }
+            } catch (err) {
+                showStatus('无法读取剪贴板，请手动粘贴', 'error');
+            }
+        });
 
-        // Init batch state
-        batchResults = lines.map((url, i) => ({
-            url,
-            platform: detectPlatformFromUrl(url),
-            index: i,
-            status: 'pending',
-            data: null,
-            error: null
-        }));
+        // Parse events
+        urlInput.addEventListener('paste', () => {
+            setTimeout(() => {
+                const raw = urlInput.value.trim();
+                if (!raw) return;
+                const cleanUrl = extractUrl(raw);
+                if (cleanUrl && cleanUrl !== raw && currentMode === 'single') {
+                    urlInput.value = cleanUrl;
+                }
+                handleParse();
+            }, 100);
+        });
 
-        // Show batch section with progress
-        batchSection.style.display = 'block';
-        renderBatchResults();
+        parseBtn.addEventListener('click', handleParse);
+        urlInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleParse();
+            }
+        });
 
-        const successCount = { val: 0 };
+        // Main parse function
+        async function handleParse() {
+            if (currentMode === 'batch') {
+                return handleBatchParse();
+            }
 
-        // Parse each URL
-        for (let i = 0; i < batchResults.length; i++) {
-            batchResults[i].status = 'parsing';
-            renderBatchResults();
+            let url = extractUrl(urlInput.value.trim());
+            if (!url) {
+                showStatus('请输入视频链接', 'error');
+                return;
+            }
+
+            setLoading(true);
+            hideStatus();
+            resultSection.classList.remove('show');
+            batchSection.classList.remove('show');
 
             try {
                 const resp = await fetch(`${API_BASE}/api/parse`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: batchResults[i].url, platform: batchResults[i].platform })
+                    body: JSON.stringify({ url, platform: currentPlatform })
                 });
+
                 const data = await resp.json();
 
                 if (data.code === 0 && data.data) {
-                    batchResults[i].status = 'success';
-                    batchResults[i].data = data.data;
-                    successCount.val++;
+                    showSingleResult(data.data);
+                    addToHistory(data.data);
+                    showStatus('解析成功', 'success');
                 } else {
-                    batchResults[i].status = 'error';
-                    batchResults[i].error = data.msg;
+                    showStatus(data.msg || '解析失败，请检查链接是否正确', 'error');
                 }
             } catch (err) {
-                batchResults[i].status = 'error';
-                batchResults[i].error = '网络错误';
+                showStatus('无法连接到服务器，请确认后端服务已启动', 'error');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // Batch parse
+        async function handleBatchParse() {
+            const raw = urlInput.value.trim();
+            if (!raw) {
+                showStatus('请输入视频链接', 'error');
+                return;
             }
 
-            batchProgress = Math.round(((i + 1) / batchResults.length) * 100);
-            renderBatchResults();
+            const lines = raw.split('\n').map(l => extractUrl(l.trim())).filter(Boolean);
+            if (lines.length === 0) {
+                showStatus('未能从文本中提取到有效的视频链接', 'error');
+                return;
+            }
+            if (lines.length > 20) {
+                showStatus('批量解析最多支持 20 个链接', 'error');
+                return;
+            }
+
+            setLoading(true);
+            hideStatus();
+            resultSection.classList.remove('show');
+            batchSection.classList.add('show');
+
+            let batchResults = lines.map((url, i) => ({
+                url,
+                platform: detectPlatformFromUrl(url),
+                index: i,
+                status: 'pending',
+                data: null,
+                error: null
+            }));
+
+            renderBatchList(batchResults);
+            let successCount = 0;
+
+            for (let i = 0; i < batchResults.length; i++) {
+                batchResults[i].status = 'parsing';
+                renderBatchList(batchResults);
+
+                try {
+                    const resp = await fetch(`${API_BASE}/api/parse`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: batchResults[i].url, platform: batchResults[i].platform })
+                    });
+                    const data = await resp.json();
+
+                    if (data.code === 0 && data.data) {
+                        batchResults[i].status = 'success';
+                        batchResults[i].data = data.data;
+                        successCount++;
+                    } else {
+                        batchResults[i].status = 'error';
+                        batchResults[i].error = data.msg;
+                    }
+                } catch (err) {
+                    batchResults[i].status = 'error';
+                    batchResults[i].error = '网络错误';
+                }
+
+                renderBatchList(batchResults);
+            }
+
+            setLoading(false);
+            batchDownloadAllBtn.disabled = successCount === 0;
+
+            if (successCount > 0) {
+                showStatus(`批量解析完成：${successCount}/${batchResults.length} 个成功`, successCount === batchResults.length ? 'success' : 'error');
+            } else {
+                showStatus('所有链接解析失败', 'error');
+            }
         }
 
-        setLoading(false);
-        batchProgress = 0;
-
-        if (successCount.val > 0) {
-            showStatus(`批量解析完成：${successCount.val}/${batchResults.length} 个成功`, successCount.val === batchResults.length ? 'success' : 'error');
-        } else {
-            showStatus('所有链接解析失败', 'error');
+        function detectPlatformFromUrl(url) {
+            if (/douyin|抖音|iesdouyin|v\.douyin/i.test(url)) return 'douyin';
+            if (/kuaishou|快手|v\.kuaishou|v\.kwai/i.test(url)) return 'kuaishou';
+            if (/xiaohongshu|小红书|xhslink/i.test(url)) return 'xiaohongshu';
+            if (/bilibili|b站|b23\.tv/i.test(url)) return 'bilibili';
+            return currentPlatform;
         }
 
-        renderBatchResults();
-    }
+        // Download function
+        window.downloadFile = async function(videoUrl, filename) {
+            showStatus('正在下载，请稍候...', 'info');
+            try {
+                const resp = await fetch(videoUrl, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+                
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                
+                const blob = await resp.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+                showStatus('下载完成', 'success');
+            } catch (err) {
+                showStatus('已打开视频，请点击右下角「⋮」按钮下载', 'success');
+                const a = document.createElement('a');
+                a.href = videoUrl;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        };
 
-    function detectPlatformFromUrl(url) {
-        if (/douyin|抖音|iesdouyin|v\.douyin/i.test(url)) return 'douyin';
-        if (/kuaishou|快手|v\.kuaishou|v\.kwai/i.test(url)) return 'kuaishou';
-        if (/xiaohongshu|小红书|xhslink/i.test(url)) return 'xiaohongshu';
-        if (/bilibili|b站|b23\.tv/i.test(url)) return 'bilibili';
-        return currentPlatform;
-    }
+        // Show single result
+        function showSingleResult(info) {
+            const platformNames = { douyin: '抖音', kuaishou: '快手', xiaohongshu: '小红书', bilibili: 'B站' };
+            const safeName = (info.title || 'video').replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || 'video';
 
-    // ─── Show single result ───
-    // ─── Force download file via fetch+blob ───
-    window.downloadFile = async function(videoUrl, filename, type) {
-        showStatus('正在下载，请稍候...', 'info');
-        try {
-            // Fetch video directly (may fail due to CORS, but worth trying)
-            const resp = await fetch(videoUrl, {
-                method: 'GET',
-                mode: 'cors',
-                credentials: 'omit'
-            });
-            
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            
-            const blob = await resp.blob();
-            const blobUrl = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = blobUrl;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(blobUrl);
-            showStatus('下载完成', 'success');
-        } catch (err) {
-            // Fallback: open in new tab for manual download
-            showStatus('直接下载失败，正在打开视频页面...', 'info');
-            const a = document.createElement('a');
-            a.href = videoUrl;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            showStatus('已打开视频，请点击右下角「⋮」按钮下载', 'success');
-        }
-    }
-
-    function showSingleResult(info) {
-        const platformNames = { douyin: '抖音', kuaishou: '快手', xiaohongshu: '小红书', bilibili: 'B站' };
-        const safeName = (info.title || 'video').replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || 'video';
-        const videoDownloadUrl = `${API_BASE}/api/download?url=${encodeURIComponent(info.video_url)}&filename=${encodeURIComponent(safeName)}`;
-        const audioDownloadUrl = info.music_url ? `${API_BASE}/api/download?url=${encodeURIComponent(info.music_url)}&filename=${encodeURIComponent(info.music_title || safeName)}&type=audio` : '';
-
-        resultSection.innerHTML = `
-            <div class="result-card">
-                <div class="result-video">
-                    ${info.cover ? `<img src="${info.cover}" style="width:100%;height:100%;object-fit:cover;" alt="cover">` : ''}
-                    ${info.video_url ? `
-                        <video controls preload="metadata" poster="${info.cover || ''}" playsinline>
-                            <source src="${info.video_url}" type="video/mp4">
-                        </video>
-                    ` : `
-                        <div class="no-video">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                                <polygon points="5 3 19 12 5 21 5 3"/>
-                            </svg>
-                            暂无视频预览
-                        </div>
-                    `}
-                </div>
-                <div class="result-info">
-                    <div class="result-title">${escapeHtml(info.title || '未知标题')}</div>
-                    <div class="result-meta">
-                        ${info.author ? `<span class="result-meta-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            ${escapeHtml(info.author)}
-                        </span>` : ''}
-                        <span class="result-meta-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                            ${platformNames[info.platform] || '未知平台'}
-                        </span>
-                    </div>
-                    <div class="result-actions">
+            resultSection.innerHTML = `
+                <div class="result-card">
+                    <div class="result-video">
+                        ${info.cover ? `<img src="${info.cover}" alt="cover">` : ''}
                         ${info.video_url ? `
-                            <button class="download-btn download-btn-video" onclick="downloadFile('${info.video_url}','${safeName}.mp4')">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                下载视频
-                            </button>
-                            ${info.music_url ? `
-                                <button class="download-btn download-btn-audio" onclick="downloadFile('${info.music_url}','${(info.music_title || safeName).replace(/[^\w\u4e00-\u9fff\-_. ]/g,"")}.mp3','audio')">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                                    下载音频
+                            <video controls preload="metadata" poster="${info.cover || ''}" playsinline>
+                                <source src="${info.video_url}" type="video/mp4">
+                            </video>
+                        ` : `
+                            <div class="no-video">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                暂无视频预览
+                            </div>
+                        `}
+                    </div>
+                    <div class="result-info">
+                        <div class="result-title">${escapeHtml(info.title || '未知标题')}</div>
+                        <div class="result-meta">
+                            ${info.author ? `<span class="result-meta-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                ${escapeHtml(info.author)}
+                            </span>` : ''}
+                            <span class="result-meta-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                                ${platformNames[info.platform] || '未知平台'}
+                            </span>
+                        </div>
+                        <div class="result-actions">
+                            ${info.video_url ? `
+                                <button class="download-btn download-btn-video" onclick="downloadFile('${info.video_url}','${safeName}.mp4')">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    下载视频
                                 </button>
-                            ` : `
-                                <span class="download-btn download-btn-audio" style="opacity:0.4;cursor:not-allowed;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                                    无音频
-                                </span>
-                            `}
-                            <button class="download-btn download-btn-copy" onclick="navigator.clipboard.writeText('${info.video_url}').then(()=>{this.textContent='已复制';setTimeout(()=>this.textContent='复制链接',1500)})">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                复制链接
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-        `;
-        resultSection.style.display = 'block';
-        resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    // ─── Render batch results ───
-    function renderBatchResults() {
-        const list = document.getElementById('batchList');
-        const downloadAllBtn = document.getElementById('batchDownloadAllBtn');
-
-        // Update download all button
-        const successItems = batchResults.filter(r => r.status === 'success');
-        downloadAllBtn.disabled = successItems.length === 0;
-
-        // Progress
-        const progressHTML = batchResults.length > 0 && batchProgress > 0 ? `
-            <div class="batch-progress">
-                <div class="batch-progress-bar"><div class="batch-progress-fill" style="width:${batchProgress}%"></div></div>
-                <div class="batch-progress-text">${batchProgress}% (${successItems.length}/${batchResults.length})</div>
-            </div>
-        ` : '';
-
-        list.innerHTML = progressHTML + batchResults.map((item, i) => {
-            const statusLabels = { pending: '等待中', parsing: '解析中', success: '已解析', error: '失败' };
-            const statusClass = item.status === 'parsing' ? 'pending' : item.status;
-            const title = item.data?.title || item.url || `视频 ${i + 1}`;
-            const cover = item.data?.cover || '';
-            const author = item.data?.author || '';
-            const safeName = (title).replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || `video_${i+1}`;
-            const downloadUrl = item.data?.video_url ? `${API_BASE}/api/download?url=${encodeURIComponent(item.data.video_url)}&filename=${encodeURIComponent(safeName)}` : '';
-
-            return `
-                <div class="batch-item">
-                    <img class="batch-item-thumb" src="${cover}" alt="" onerror="this.style.display='none'">
-                    <div class="batch-item-info">
-                        <div class="batch-item-title">${escapeHtml(title)}</div>
-                        <div class="batch-item-meta">${escapeHtml(author)}</div>
-                    </div>
-                    <span class="batch-item-status ${statusClass}">${statusLabels[item.status] || item.status}</span>
-                    <div class="batch-item-actions">
-                        ${item.status === 'success' && downloadUrl ? `
-                            <button class="batch-item-btn" onclick="downloadFile('${item.data.video_url}','${safeName}.mp4')" title="下载视频">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            </button>
-                            <button class="batch-item-btn" onclick="navigator.clipboard.writeText('${item.data.video_url}')" title="复制链接">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            </button>
-                        ` : ''}
-                        ${item.status === 'error' ? `<span class="batch-item-btn" style="cursor:default;font-size:10px;">${escapeHtml(item.error || '失败')}</span>` : ''}
+                                ${info.music_url ? `
+                                    <button class="download-btn download-btn-audio" onclick="downloadFile('${info.music_url}','${(info.music_title || safeName).replace(/[^\w\u4e00-\u9fff\-_. ]/g,"")}.mp3','audio')">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                                        下载音频
+                                    </button>
+                                ` : ''}
+                                <button class="download-btn download-btn-copy" onclick="navigator.clipboard.writeText('${info.video_url}').then(()=>{this.textContent='已复制';setTimeout(()=>this.textContent='复制链接',1500)})">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    复制链接
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
             `;
-        }).join('');
-    }
+            resultSection.classList.add('show');
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
 
-    // ─── Batch download all ───
-    document.getElementById('batchDownloadAllBtn').addEventListener('click', () => {
-        const successItems = batchResults.filter(r => r.status === 'success');
-        if (successItems.length === 0) return;
+        // Render batch list
+        function renderBatchList(items) {
+            const statusLabels = { pending: '等待中', parsing: '解析中', success: '已解析', error: '失败' };
+            
+            batchList.innerHTML = items.map((item, i) => {
+                const statusClass = item.status === 'parsing' ? 'pending' : item.status;
+                const title = item.data?.title || item.url || `视频 ${i + 1}`;
+                const cover = item.data?.cover || '';
+                const safeName = title.replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || `video_${i+1}`;
 
-        const payload = successItems.map(item => ({
-            url: item.data.video_url,
-            title: item.data.title,
-            platform: item.data.platform
-        }));
+                return `
+                    <div class="batch-item">
+                        <img class="batch-item-thumb" src="${cover}" alt="" onerror="this.style.display='none'">
+                        <div class="batch-item-info">
+                            <div class="batch-item-title">${escapeHtml(title)}</div>
+                            <div class="batch-item-meta">${item.data?.author || ''}</div>
+                        </div>
+                        <span class="batch-item-status ${statusClass}">${statusLabels[item.status] || item.status}</span>
+                        <div class="batch-item-actions">
+                            ${item.status === 'success' && item.data?.video_url ? `
+                                <button class="batch-item-btn" onclick="downloadFile('${item.data.video_url}','${safeName}.mp4')" title="下载视频">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button class="batch-item-btn" onclick="navigator.clipboard.writeText('${item.data.video_url}')" title="复制链接">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-        const downloadAllBtn = document.getElementById('batchDownloadAllBtn');
-        downloadAllBtn.disabled = true;
-        downloadAllBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 打包中...';
-
-        fetch(`${API_BASE}/api/batch-download`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ urls: payload })
-        })
-        .then(resp => {
-            const filename = `videolens_batch_${Date.now()}.zip`;
-            return resp.blob().then(blob => {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                a.click();
-                URL.revokeObjectURL(url);
+        // Batch download all
+        batchDownloadAllBtn.addEventListener('click', () => {
+            const buttons = batchList.querySelectorAll('.batch-item-btn[title="下载视频"]');
+            buttons.forEach((btn, i) => {
+                setTimeout(() => btn.click(), i * 500);
             });
-        })
-        .catch(err => {
-            showStatus('打包下载失败', 'error');
-        })
-        .finally(() => {
-            downloadAllBtn.disabled = false;
-            downloadAllBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 下载全部 (ZIP)';
         });
-    });
 
-    // ─── Status messages ───
-    function showStatus(msg, type) {
-        const icon = type === 'error'
-            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
-            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
-        statusMessage.innerHTML = `<div class="status-msg ${type}">${icon}<span>${msg}</span></div>`;
-    }
-    function hideStatus() { statusMessage.innerHTML = ''; }
-
-    // ─── Loading state ───
-    function setLoading(loading) {
-        parseBtn.disabled = loading;
-        parseBtn.classList.toggle('loading', loading);
-        const iconEl = parseBtn.querySelector('.parse-icon');
-        const textEl = parseBtn.querySelector('.parse-text');
-        const loadingEl = parseBtn.querySelector('.parse-loading');
-        if (loading) {
-            if (iconEl) iconEl.style.display = 'none';
-            if (textEl) textEl.style.display = 'none';
-            if (loadingEl) loadingEl.style.display = 'inline';
-        } else {
-            if (iconEl) iconEl.style.display = '';
-            if (textEl) textEl.style.display = '';
-            if (loadingEl) loadingEl.style.display = 'none';
+        // History functions
+        function addToHistory(info) {
+            const item = {
+                title: info.title,
+                platform: info.platform,
+                cover: info.cover,
+                url: info.video_url,
+                time: new Date().toLocaleString('zh-CN')
+            };
+            history.unshift(item);
+            if (history.length > 10) history.pop();
+            localStorage.setItem('videolens_history', JSON.stringify(history));
+            renderHistory();
         }
-    }
 
-    // ─── History ───
-    function addToHistory(info) {
-        history.unshift({
-            title: info.title,
-            platform: info.platform,
-            url: info.video_url,
-            time: Date.now()
+        function renderHistory() {
+            if (history.length === 0) {
+                historySection.style.display = 'none';
+                return;
+            }
+            historySection.style.display = 'block';
+
+            const platformIcons = { douyin: '🎵', kuaishou: '📱', xiaohongshu: '📕', bilibili: '📺' };
+
+            historyList.innerHTML = history.map(item => `
+                <div class="history-item" onclick="window.open('${item.url}', '_blank')">
+                    <div class="history-item-icon">${platformIcons[item.platform] || '📹'}</div>
+                    <div class="history-item-info">
+                        <div class="history-item-title">${escapeHtml(item.title)}</div>
+                        <div class="history-item-time">${item.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('clearHistory').addEventListener('click', () => {
+            history = [];
+            localStorage.removeItem('videolens_history');
+            renderHistory();
         });
-        history = history.slice(0, 10);
-        localStorage.setItem('videolens_history', JSON.stringify(history));
-        renderHistory();
-    }
 
-    function renderHistory() {
-        if (history.length === 0) {
-            historySection.style.display = 'none';
-            return;
+        // Utility functions
+        function extractUrl(text) {
+            const urlMatch = text.match(/https?:\/\/[^\s\u4e00-\u9fff]+/);
+            if (urlMatch) {
+                return urlMatch[0].replace(/[，。！？、；：""''）】》]+$/, '');
+            }
+            return text.trim();
         }
-        historySection.style.display = 'block';
-        const platformIcons = {
-            douyin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>',
-            kuaishou: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
-            xiaohongshu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
-            bilibili: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M8 2v4M16 2v4M2 10h20"/></svg>'
-        };
-        historyList.innerHTML = history.map(item => `
-            <div class="history-item" onclick="navigator.clipboard.writeText('${item.url || ''}')">
-                <div class="history-item-platform">${platformIcons[item.platform] || ''}</div>
-                <span class="history-item-title">${escapeHtml(item.title || '未知标题')}</span>
-                <span class="history-item-time">${formatTime(item.time)}</span>
-            </div>
-        `).join('');
-    }
 
-    clearHistoryBtn.addEventListener('click', () => {
-        history = [];
-        localStorage.removeItem('videolens_history');
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function setLoading(loading) {
+            parseBtn.disabled = loading;
+            parseBtn.classList.toggle('loading', loading);
+            document.querySelector('.parse-icon').style.display = loading ? 'none' : '';
+            document.querySelector('.parse-loading').style.display = loading ? '' : 'none';
+            document.querySelector('.parse-text').textContent = loading ? '解析中...' : '开始解析';
+        }
+
+        function showStatus(msg, type) {
+            statusMessage.textContent = msg;
+            statusMessage.className = 'status-message show ' + type;
+            if (type === 'success') {
+                setTimeout(hideStatus, 3000);
+            }
+        }
+
+        function hideStatus() {
+            statusMessage.classList.remove('show');
+        }
+
+        // Init
         renderHistory();
-    });
-
-    // ─── Utilities ───
-    function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-    function formatTime(ts) {
-        const d = new Date(ts);
-        return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-    }
-
-    // Init
-    renderHistory();
-})();
-</script>
+    })();
+    </script>
 </body>
 </html>
