@@ -1253,18 +1253,18 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(0,0,0,0.8);
+                background: rgba(0,0,0,0.9);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 z-index: 10000;
-                padding: 20px;
+                padding: 16px;
             `;
             
             const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
             const hintText = isIOS 
-                ? 'iOS 下载方法：<br>1. 点击下方「打开视频」<br>2. 点击分享按钮 <img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'%3E%3Cpath d=\'M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8\'/%3E%3Cpolyline points=\'16 6 12 2 8 6\'/%3E%3Cline x1=\'12\' y1=\'2\' x2=\'12\' y2=\'15\'/%3E%3C/svg%3E" style="vertical-align:middle"> <br>3. 选择「存储到文件」或「存储视频」'
-                : '安卓下载方法：<br>1. 点击下方「打开视频」<br>2. 长按视频<br>3. 选择「下载视频」或「保存视频」';
+                ? '长按视频 → 选择「存储视频」'
+                : '长按视频 → 选择「保存视频」';
             
             modal.innerHTML = `
                 <div style="
@@ -1272,36 +1272,34 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
                     backdrop-filter: var(--glass-blur);
                     border: 1px solid var(--glass-border);
                     border-radius: var(--radius-lg);
-                    padding: 24px;
-                    max-width: 360px;
+                    padding: 16px;
+                    max-width: 400px;
                     width: 100%;
                     text-align: center;
                     color: var(--text-primary);
                 ">
-                    <div style="font-size: 48px; margin-bottom: 16px;">${isAudio ? '🎵' : '📹'}</div>
-                    <h3 style="margin-bottom: 12px; font-size: 18px;">${isAudio ? '下载音频' : '下载视频'}</h3>
-                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; line-height: 1.6;">
-                        ${hintText}
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                        <h3 style="font-size: 16px;">${isAudio ? '🎵 下载音频' : '📹 下载视频'}</h3>
+                        <button onclick="this.closest('.mobile-modal').remove()" style="background:transparent;border:none;color:var(--text-secondary);font-size:24px;cursor:pointer;">×</button>
+                    </div>
+                    <p style="color: var(--accent-primary); font-size: 14px; margin-bottom: 12px;">
+                        📱 ${hintText}
                     </p>
-                    <a href="${videoUrl}" target="_blank" style="
+                    ${isAudio ? `
+                        <audio controls src="${videoUrl}" style="width:100%;margin-bottom:12px;"></audio>
+                    ` : `
+                        <video controls playsinline webkit-playsinline src="${videoUrl}" style="width:100%;max-height:50vh;border-radius:12px;margin-bottom:12px;"></video>
+                    `}
+                    <a href="${videoUrl}" download="${filename}" style="
                         display: block;
                         background: var(--accent-gradient);
                         color: white;
-                        padding: 14px 24px;
+                        padding: 12px 20px;
                         border-radius: var(--radius-md);
                         text-decoration: none;
                         font-weight: 600;
-                        margin-bottom: 12px;
-                    " onclick="this.closest('.mobile-modal').remove()">打开视频</a>
-                    <button onclick="this.closest('.mobile-modal').remove()" style="
-                        background: transparent;
-                        border: 1px solid var(--glass-border);
-                        color: var(--text-secondary);
-                        padding: 12px 24px;
-                        border-radius: var(--radius-md);
-                        cursor: pointer;
-                        width: 100%;
-                    ">取消</button>
+                        font-size: 14px;
+                    ">点击下载</a>
                 </div>
             `;
             modal.className = 'mobile-modal';
