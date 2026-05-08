@@ -9,189 +9,160 @@
     <meta name="author" content="清清解析">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://freejiexi.cc.cd">
-    
-    <!-- Open Graph / 社交分享 -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://freejiexi.cc.cd">
     <meta property="og:title" content="抖音无水印下载 - 快手小红书B站视频解析下载 | 清清解析">
     <meta property="og:description" content="免费短视频无水印解析下载工具，支持抖音、快手、小红书、B站，一键下载高清无水印视频。">
-    <meta property="og:image" content="https://freejiexi.cc.cd/og-image.png">
-    
-    <!-- 百度站长验证（需要替换为你的验证码） -->
     <meta name="baidu-site-verification" content="YOUR_BAIDU_CODE">
-    
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --glass-highlight: rgba(255, 255, 255, 0.25);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --glass-blur: blur(20px) saturate(180%);
-            
-            --accent-primary: #00D4FF;
-            --accent-secondary: #7B61FF;
-            --accent-gradient: linear-gradient(135deg, #00D4FF 0%, #7B61FF 50%, #FF61DC 100%);
-            
-            --bg-dark: #0a0a0f;
-            --bg-gradient-1: #0f172a;
-            --bg-gradient-2: #1e1b4b;
-            --bg-gradient-3: #312e81;
-            
-            --text-primary: rgba(255, 255, 255, 0.95);
-            --text-secondary: rgba(255, 255, 255, 0.65);
-            --text-muted: rgba(255, 255, 255, 0.4);
-            
-            --success: #10b981;
-            --error: #ef4444;
-            --warning: #f59e0b;
-            
-            --radius-sm: 12px;
-            --radius-md: 20px;
-            --radius-lg: 28px;
-            --radius-xl: 40px;
-            
-            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --neon-pink: #ff2d95;
+            --neon-cyan: #00f5ff;
+            --neon-yellow: #ffe600;
+            --neon-green: #39ff14;
+            --neon-purple: #bf00ff;
+            --dark-bg: #0a0a0f;
+            --card-bg: #12121a;
+            --text-primary: #ffffff;
+            --text-secondary: #8888aa;
+            --pixel-font: 'Press Start 2P', monospace;
+            --main-font: 'Noto Sans SC', sans-serif;
         }
-
-        html { scroll-behavior: smooth; }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-            background: var(--bg-dark);
+            font-family: var(--main-font);
+            background: var(--dark-bg);
             color: var(--text-primary);
-            line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
-
-        /* Animated gradient background */
-        .bg-gradient {
+        
+        /* Scanline effect */
+        body::before {
+            content: '';
             position: fixed;
-            inset: 0;
-            z-index: -2;
-            background: 
-                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(123, 97, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse 50% 30% at 50% 80%, rgba(255, 97, 220, 0.1) 0%, transparent 50%),
-                linear-gradient(180deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 50%, var(--bg-dark) 100%);
-            animation: bgPulse 8s ease-in-out infinite;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px,
+                rgba(0, 0, 0, 0.1) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
         }
-
-        @keyframes bgPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        /* Floating orbs */
-        .orb {
+        
+        /* Floating pixels background */
+        .pixel-bg {
             position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
             z-index: -1;
-            opacity: 0.4;
-            animation: float 20s ease-in-out infinite;
         }
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(135deg, #7B61FF, #00D4FF);
-            top: -100px;
-            right: -100px;
-            animation-delay: 0s;
+        
+        .pixel {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--neon-cyan);
+            opacity: 0.3;
+            animation: float 20s linear infinite;
         }
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(135deg, #FF61DC, #7B61FF);
-            bottom: 10%;
-            left: -100px;
-            animation-delay: -7s;
-        }
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: linear-gradient(135deg, #00D4FF, #10b981);
-            top: 40%;
-            right: 10%;
-            animation-delay: -14s;
-        }
-
+        
         @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(30px, -30px) scale(1.05); }
-            50% { transform: translate(-20px, 20px) scale(0.95); }
-            75% { transform: translate(20px, 30px) scale(1.02); }
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
         }
-
-        /* ─── Navigation ─── */
-        nav {
+        
+        /* Header */
+        header {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            padding: 12px 24px;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 24px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 32px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--glass-shadow);
-            transition: all var(--transition-normal);
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--neon-cyan);
+            z-index: 100;
         }
-        nav:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--glass-highlight);
-        }
-
-        .nav-logo {
+        
+        .logo {
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
             color: var(--text-primary);
         }
-        .nav-logo-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            background: var(--accent-gradient);
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+            font-family: var(--pixel-font);
+            font-size: 10px;
+            color: var(--dark-bg);
+            clip-path: polygon(
+                0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px,
+                100% calc(100% - 10px), calc(100% - 10px) 100%,
+                10px 100%, 0 calc(100% - 10px)
+            );
+            animation: pulse-glow 2s ease-in-out infinite;
         }
-        .nav-logo-text {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            font-weight: 600;
-            font-size: 18px;
-            letter-spacing: -0.5px;
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--neon-pink); }
+            50% { box-shadow: 0 0 40px var(--neon-cyan); }
         }
+        
+        .logo-text {
+            font-family: var(--pixel-font);
+            font-size: 12px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px var(--neon-pink);
+        }
+        
         .nav-links {
             display: flex;
-            gap: 28px;
+            gap: 24px;
             list-style: none;
         }
+        
         .nav-links a {
-            text-decoration: none;
             color: var(--text-secondary);
+            text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: all var(--transition-fast);
+            transition: all 0.3s;
             position: relative;
         }
+        
+        .nav-links a:hover {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        
         .nav-links a::after {
             content: '';
             position: absolute;
@@ -199,338 +170,330 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--accent-gradient);
-            transition: width var(--transition-fast);
-            border-radius: 2px;
+            background: var(--neon-cyan);
+            transition: width 0.3s;
         }
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
+        
         .nav-links a:hover::after {
             width: 100%;
         }
-
-        /* ─── Hero ─── */
-        .hero {
-            padding: 160px 40px 60px;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
+        
+        /* Main content */
+        main {
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+        
+        /* Hero section */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 800px;
+        }
+        
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 20px;
+            padding: 8px 16px;
+            background: rgba(255, 45, 149, 0.1);
+            border: 1px solid var(--neon-pink);
             border-radius: 100px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-            animation: fadeUp 0.8s ease both;
+            font-size: 12px;
+            color: var(--neon-pink);
+            margin-bottom: 24px;
+            animation: flicker 3s infinite;
         }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            92% { opacity: 1; }
+            93% { opacity: 0.8; }
+            94% { opacity: 1; }
+            96% { opacity: 0.9; }
+            97% { opacity: 1; }
+        }
+        
         .hero-badge-dot {
             width: 8px;
             height: 8px;
+            background: var(--neon-green);
             border-radius: 50%;
-            background: var(--success);
-            box-shadow: 0 0 10px var(--success);
-            animation: pulse 2s ease-in-out infinite;
+            animation: blink 1s infinite;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.9); }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
+        
         .hero h1 {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            font-size: 56px;
-            font-weight: 700;
-            letter-spacing: -2px;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            animation: fadeUp 0.8s ease 0.1s both;
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 16px;
         }
-        .hero h1 span {
-            background: var(--accent-gradient);
+        
+        .hero h1 .highlight {
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan), var(--neon-yellow));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            position: relative;
         }
+        
         .hero p {
             font-size: 18px;
             color: var(--text-secondary);
-            max-width: 500px;
-            margin: 0 auto;
-            font-weight: 400;
-            animation: fadeUp 0.8s ease 0.2s both;
+            margin-bottom: 40px;
         }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ─── Parser Section ─── */
-        .parser-section {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 0 40px 60px;
-            animation: fadeUp 0.8s ease 0.3s both;
-        }
+        
+        /* Parser card */
         .parser-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            box-shadow: var(--glass-shadow);
-            transition: all var(--transition-normal);
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 0;
+            padding: 24px;
+            position: relative;
+            clip-path: polygon(
+                0 0, 
+                calc(100% - 20px) 0, 
+                100% 20px, 
+                100% 100%, 
+                20px 100%, 
+                0 calc(100% - 20px)
+            );
         }
-        .parser-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--glass-highlight);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        
+        .parser-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan), var(--neon-yellow), var(--neon-green));
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.3;
+            animation: rotate-gradient 5s linear infinite;
         }
-
+        
+        @keyframes rotate-gradient {
+            0% { filter: blur(20px) hue-rotate(0deg); }
+            100% { filter: blur(20px) hue-rotate(360deg); }
+        }
+        
         /* Mode toggle */
         .mode-toggle {
             display: flex;
             gap: 8px;
-            margin-bottom: 20px;
-            padding: 4px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: var(--radius-md);
-            width: fit-content;
+            margin-bottom: 16px;
         }
+        
         .mode-btn {
             padding: 10px 20px;
-            border: none;
             background: transparent;
+            border: 2px solid var(--text-secondary);
             color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: var(--radius-sm);
+            font-family: var(--pixel-font);
+            font-size: 10px;
             cursor: pointer;
-            transition: all var(--transition-fast);
+            transition: all 0.3s;
+            clip-path: polygon(
+                8px 0, 100% 0, 100% calc(100% - 8px),
+                calc(100% - 8px) 100%, 0 100%, 0 8px
+            );
         }
+        
+        .mode-btn:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+        
         .mode-btn.active {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            color: var(--text-primary);
-            border: 1px solid var(--glass-border);
+            background: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            color: var(--dark-bg);
+            text-shadow: none;
         }
-        .mode-btn:hover:not(.active) {
-            color: var(--text-primary);
-        }
-
+        
         /* Platform tabs */
         .platform-tabs {
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
+        
         .platform-tab {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            border: 1px solid var(--glass-border);
+            gap: 6px;
+            padding: 8px 14px;
             background: transparent;
+            border: 1px solid var(--text-secondary);
             color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: var(--radius-md);
+            font-size: 13px;
             cursor: pointer;
-            transition: all var(--transition-fast);
+            transition: all 0.3s;
         }
+        
         .platform-tab:hover {
-            background: var(--glass-bg);
-            color: var(--text-primary);
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
         }
+        
         .platform-tab.active {
-            background: var(--accent-gradient);
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
             border-color: transparent;
             color: white;
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
         }
-        .platform-tab svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Input area */
+        
+        /* Input */
         .input-wrapper {
             position: relative;
             margin-bottom: 16px;
         }
+        
         #urlInput {
             width: 100%;
-            padding: 16px 56px 16px 20px;
-            border: 1px solid var(--glass-border);
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: var(--radius-md);
-            font-size: 15px;
+            padding: 16px 50px 16px 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--text-secondary);
             color: var(--text-primary);
+            font-size: 14px;
+            font-family: var(--main-font);
             resize: none;
-            transition: all var(--transition-fast);
-            font-family: inherit;
+            transition: all 0.3s;
         }
-        #urlInput::placeholder {
-            color: var(--text-muted);
-        }
+        
         #urlInput:focus {
             outline: none;
-            border-color: var(--accent-primary);
-            background: rgba(0, 0, 0, 0.3);
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
         }
-        #urlInput.batch-mode {
-            min-height: 120px;
+        
+        #urlInput::placeholder {
+            color: var(--text-secondary);
         }
+        
         .paste-btn {
             position: absolute;
             right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-sm);
+            top: 12px;
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
-            transition: all var(--transition-fast);
+            transition: all 0.3s;
         }
+        
         .paste-btn:hover {
-            background: var(--glass-highlight);
-            color: var(--text-primary);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
         }
-
+        
         /* Parse button */
         .parse-btn {
             width: 100%;
-            padding: 16px 28px;
+            padding: 16px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple), var(--neon-cyan));
+            background-size: 200% 100%;
             border: none;
-            background: var(--accent-gradient);
             color: white;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: var(--radius-md);
+            font-family: var(--pixel-font);
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all var(--transition-fast);
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+            transition: all 0.3s;
+            clip-path: polygon(
+                10px 0, 100% 0, 100% calc(100% - 10px),
+                calc(100% - 10px) 100%, 0 100%, 0 10px
+            );
+            animation: gradient-shift 3s ease infinite;
         }
+        
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
         .parse-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+            transform: scale(1.02);
+            box-shadow: 0 0 30px var(--neon-pink);
         }
-        .parse-btn:active {
-            transform: translateY(0);
-        }
+        
         .parse-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
+        
         .parse-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
         }
-        .parse-btn.loading svg {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Mode hint */
-        .mode-hint {
-            margin-top: 12px;
-            font-size: 13px;
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        /* ─── Status Messages ─── */
+        
+        /* Status */
         .status-message {
-            max-width: 700px;
-            margin: 20px auto;
-            padding: 14px 20px;
-            border-radius: var(--radius-md);
+            max-width: 600px;
+            margin: 16px auto;
+            padding: 12px 16px;
+            border-radius: 0;
             font-size: 14px;
             display: none;
             align-items: center;
-            gap: 10px;
-            animation: fadeUp 0.3s ease;
+            gap: 8px;
         }
-        .status-message.show {
-            display: flex;
-        }
-        .status-message.success {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: var(--success);
-        }
-        .status-message.error {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: var(--error);
-        }
-        .status-message.info {
-            background: rgba(0, 212, 255, 0.15);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            color: var(--accent-primary);
-        }
-
-        /* ─── Results ─── */
+        
+        .status-message.show { display: flex; }
+        .status-message.success { background: rgba(57, 255, 20, 0.1); border: 1px solid var(--neon-green); color: var(--neon-green); }
+        .status-message.error { background: rgba(255, 45, 149, 0.1); border: 1px solid var(--neon-pink); color: var(--neon-pink); }
+        .status-message.info { background: rgba(0, 245, 255, 0.1); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); }
+        
+        /* Result section */
         .result-section {
-            max-width: 700px;
-            margin: 32px auto;
-            padding: 0 40px;
+            max-width: 600px;
+            margin: 24px auto;
+            padding: 0 20px;
             display: none;
         }
-        .result-section.show {
-            display: block;
-            animation: fadeUp 0.5s ease;
-        }
-
+        
+        .result-section.show { display: block; }
+        
         .result-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
+            background: var(--card-bg);
+            border: 2px solid var(--neon-green);
             overflow: hidden;
-            box-shadow: var(--glass-shadow);
         }
-
+        
         .result-video {
             position: relative;
             aspect-ratio: 9/16;
-            max-height: 500px;
-            background: rgba(0, 0, 0, 0.3);
+            max-height: 400px;
+            background: #000;
         }
+        
         .result-video video,
         .result-video img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
+        
         .no-video {
             width: 100%;
             height: 100%;
@@ -538,31 +501,28 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             gap: 12px;
         }
-        .no-video svg {
-            width: 48px;
-            height: 48px;
-            opacity: 0.5;
-        }
-
+        
         .result-info {
-            padding: 24px;
+            padding: 20px;
         }
+        
         .result-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 700;
             margin-bottom: 12px;
             line-height: 1.5;
         }
+        
         .result-meta {
             display: flex;
             gap: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
+        
         .result-meta-item {
             display: flex;
             align-items: center;
@@ -570,443 +530,393 @@
             font-size: 13px;
             color: var(--text-secondary);
         }
-        .result-meta-item svg {
-            width: 16px;
-            height: 16px;
-        }
-
+        
         .result-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
         }
+        
         .download-btn {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 20px;
+            padding: 12px 18px;
             border: none;
-            border-radius: var(--radius-sm);
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: all var(--transition-fast);
+            transition: all 0.3s;
             text-decoration: none;
+            font-family: var(--main-font);
         }
+        
         .download-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
         }
+        
         .download-btn-video {
-            background: var(--accent-gradient);
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
         }
+        
         .download-btn-video:hover {
+            box-shadow: 0 0 20px var(--neon-pink);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
         }
+        
         .download-btn-audio {
-            background: rgba(123, 97, 255, 0.2);
-            border: 1px solid rgba(123, 97, 255, 0.4);
-            color: #a78bfa;
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
         }
+        
         .download-btn-audio:hover {
-            background: rgba(123, 97, 255, 0.3);
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
         }
+        
         .download-btn-copy {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
+            background: transparent;
+            border: 1px solid var(--text-secondary);
             color: var(--text-secondary);
         }
+        
         .download-btn-copy:hover {
-            background: var(--glass-highlight);
-            color: var(--text-primary);
+            border-color: var(--neon-yellow);
+            color: var(--neon-yellow);
         }
-
-        /* ─── Batch Results ─── */
+        
+        /* Batch section */
         .batch-section {
-            max-width: 700px;
-            margin: 32px auto;
-            padding: 0 40px;
+            max-width: 600px;
+            margin: 24px auto;
+            padding: 0 20px;
             display: none;
         }
-        .batch-section.show {
-            display: block;
-            animation: fadeUp 0.5s ease;
-        }
+        
+        .batch-section.show { display: block; }
+        
         .batch-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
+        
         .batch-title {
-            font-size: 18px;
-            font-weight: 600;
+            font-family: var(--pixel-font);
+            font-size: 12px;
+            color: var(--neon-cyan);
         }
+        
         .batch-download-all {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--neon-green);
             border: none;
-            background: var(--accent-gradient);
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: var(--radius-sm);
+            color: var(--dark-bg);
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all var(--transition-fast);
         }
-        .batch-download-all:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
-        }
+        
         .batch-download-all:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-
+        
         .batch-list {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--text-secondary);
         }
+        
         .batch-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--glass-border);
-            transition: background var(--transition-fast);
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .batch-item:last-child {
-            border-bottom: none;
-        }
-        .batch-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
+        
+        .batch-item:last-child { border-bottom: none; }
+        
         .batch-item-thumb {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-sm);
+            width: 50px;
+            height: 50px;
             object-fit: cover;
-            background: rgba(0, 0, 0, 0.3);
+            background: #000;
         }
+        
         .batch-item-info {
             flex: 1;
             min-width: 0;
         }
+        
         .batch-item-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            color: var(--text-primary);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             margin-bottom: 4px;
         }
+        
         .batch-item-meta {
-            font-size: 12px;
-            color: var(--text-muted);
+            font-size: 11px;
+            color: var(--text-secondary);
         }
+        
         .batch-item-status {
-            font-size: 12px;
-            font-weight: 500;
-            padding: 4px 10px;
-            border-radius: 100px;
+            font-size: 10px;
+            font-family: var(--pixel-font);
+            padding: 4px 8px;
         }
-        .batch-item-status.pending {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--warning);
-        }
-        .batch-item-status.success {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--success);
-        }
-        .batch-item-status.error {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--error);
-        }
-        .batch-item-actions {
-            display: flex;
-            gap: 8px;
-        }
+        
+        .batch-item-status.pending { background: rgba(255, 230, 0, 0.1); color: var(--neon-yellow); }
+        .batch-item-status.success { background: rgba(57, 255, 20, 0.1); color: var(--neon-green); }
+        .batch-item-status.error { background: rgba(255, 45, 149, 0.1); color: var(--neon-pink); }
+        
         .batch-item-btn {
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-sm);
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
-            transition: all var(--transition-fast);
+            transition: all 0.3s;
         }
+        
         .batch-item-btn:hover {
-            background: var(--glass-highlight);
-            color: var(--text-primary);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
         }
-
-        /* ─── History ─── */
+        
+        /* History */
         .history-section {
-            max-width: 700px;
+            max-width: 600px;
             margin: 40px auto;
-            padding: 0 40px;
+            padding: 0 20px;
         }
+        
         .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
+        
         .history-title {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 14px;
             color: var(--text-secondary);
         }
+        
         .history-clear {
-            font-size: 13px;
-            color: var(--text-muted);
+            font-size: 12px;
+            color: var(--neon-pink);
             background: none;
             border: none;
             cursor: pointer;
-            transition: color var(--transition-fast);
         }
-        .history-clear:hover {
-            color: var(--error);
-        }
+        
         .history-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
+        
         .history-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md);
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--text-secondary);
             cursor: pointer;
-            transition: all var(--transition-fast);
+            transition: all 0.3s;
         }
+        
         .history-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--glass-highlight);
+            border-color: var(--neon-cyan);
         }
+        
         .history-item-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-sm);
-            background: rgba(0, 0, 0, 0.3);
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 16px;
         }
+        
         .history-item-info {
             flex: 1;
             min-width: 0;
         }
+        
         .history-item-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            color: var(--text-primary);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        
         .history-item-time {
-            font-size: 12px;
-            color: var(--text-muted);
+            font-size: 11px;
+            color: var(--text-secondary);
         }
-
-        /* ─── Footer ─── */
+        
+        /* Footer */
         footer {
             text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-            font-size: 13px;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
         }
-        footer a {
-            color: var(--accent-primary);
-            text-decoration: none;
-        }
-
-        /* ─── Responsive ─── */
+        
+        footer p { margin: 4px 0; }
+        
+        /* Mobile */
         @media (max-width: 640px) {
-            nav {
-                top: 12px;
-                padding: 10px 16px;
-                gap: 20px;
-            }
-            .nav-links {
-                display: none;
-            }
-            .hero {
-                padding: 120px 24px 40px;
-            }
-            .hero h1 {
-                font-size: 36px;
-            }
-            .parser-section,
-            .result-section,
-            .batch-section,
-            .history-section {
-                padding-left: 24px;
-                padding-right: 24px;
-            }
-            .platform-tabs {
-                gap: 8px;
-            }
-            .platform-tab {
-                padding: 8px 14px;
-                font-size: 13px;
-            }
-            .result-actions {
-                flex-direction: column;
-            }
-            .download-btn {
-                justify-content: center;
-            }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 14px; }
+            .parser-card { margin: 0 16px; }
+            .result-actions { flex-direction: column; }
+            .download-btn { justify-content: center; }
         }
     </style>
 </head>
 <body>
-    <!-- Background effects -->
-    <div class="bg-gradient"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-
-    <!-- Navigation -->
-    <nav id="navbar">
-        <a href="#" class="nav-logo">
-            <div class="nav-logo-icon">清解析</div>
-            <span class="nav-logo-text">清清解析</span>
+    <!-- Pixel background -->
+    <div class="pixel-bg" id="pixelBg"></div>
+    
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">
+            <div class="logo-icon">清</div>
+            <span class="logo-text">清清解析</span>
         </a>
         <ul class="nav-links">
             <li><a href="#parse">解析</a></li>
             <li><a href="#features">特性</a></li>
         </ul>
-    </nav>
-
-    <!-- Hero -->
-    <section class="hero" id="parse">
-        <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            <span>支持抖音、快手、小红书、B站</span>
-        </div>
-        <h1>短视频<span>无水印</span>解析</h1>
-        <p>粘贴链接，一键解析高清无水印视频</p>
-    </section>
-
-    <!-- Parser -->
-    <section class="parser-section">
-        <div class="parser-card">
-            <!-- Mode Toggle -->
+    </header>
+    
+    <!-- Main -->
+    <main>
+        <!-- Hero -->
+        <section class="hero" id="parse">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                <span>支持抖音、快手、小红书、B站</span>
+            </div>
+            <h1>短视频<span class="highlight">无水印</span>解析</h1>
+            <p>粘贴链接，一键解析高清无水印视频</p>
+        </section>
+        
+        <!-- Parser Card -->
+        <section class="parser-card">
             <div class="mode-toggle">
                 <button class="mode-btn" id="modeSingle">单个</button>
                 <button class="mode-btn active" id="modeBatch">批量</button>
             </div>
-
-            <!-- Platform Tabs -->
+            
             <div class="platform-tabs">
-                <button class="platform-tab active" data-platform="douyin">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                    抖音
-                </button>
-                <button class="platform-tab" data-platform="kuaishou">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                    快手
-                </button>
-                <button class="platform-tab" data-platform="xiaohongshu">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                    小红书
-                </button>
-                <button class="platform-tab" data-platform="bilibili">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                    B站
-                </button>
+                <button class="platform-tab active" data-platform="douyin">抖音</button>
+                <button class="platform-tab" data-platform="kuaishou">快手</button>
+                <button class="platform-tab" data-platform="xiaohongshu">小红书</button>
+                <button class="platform-tab" data-platform="bilibili">B站</button>
             </div>
-
-            <!-- Input -->
+            
             <div class="input-wrapper">
-                <textarea id="urlInput" placeholder="粘贴多个视频链接，每行一个...
-例如：
-https://v.douyin.com/xxx1
-https://v.douyin.com/xxx2" rows="4"></textarea>
+                <textarea id="urlInput" placeholder="粘贴多个视频链接，每行一个..." rows="4"></textarea>
                 <button class="paste-btn" id="pasteBtn" title="粘贴">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <rect x="8" y="2" width="8" height="4" rx="1"/>
+                    </svg>
                 </button>
             </div>
-
-            <!-- Parse Button -->
+            
             <button class="parse-btn" id="parseBtn">
-                <svg class="parse-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-                <svg class="parse-loading" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
-                <span class="parse-text">开始解析</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                    <path d="M21 3v5h-5"/>
+                </svg>
+                <span>开始解析</span>
             </button>
-
-            <div class="mode-hint" id="modeHint">一行一个链接，支持多个</div>
-        </div>
-    </section>
-
-    <!-- Status -->
-    <div class="status-message" id="statusMessage"></div>
-
-    <!-- Result -->
-    <section class="result-section" id="resultSection"></section>
-
-    <!-- Batch -->
-    <section class="batch-section" id="batchSection">
-        <div class="batch-header">
-            <div class="batch-title">批量解析结果</div>
-            <button class="batch-download-all" id="batchDownloadAllBtn" disabled>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                下载全部
-            </button>
-        </div>
-        <div class="batch-list" id="batchList"></div>
-    </section>
-
-    <!-- History -->
-    <section class="history-section" id="historySection" style="display:none">
-        <div class="history-header">
-            <div class="history-title">解析历史</div>
-            <button class="history-clear" id="clearHistory">清空</button>
-        </div>
-        <div class="history-list" id="historyList"></div>
-    </section>
-
+        </section>
+        
+        <!-- Status -->
+        <div class="status-message" id="statusMessage"></div>
+        
+        <!-- Result -->
+        <section class="result-section" id="resultSection"></section>
+        
+        <!-- Batch -->
+        <section class="batch-section" id="batchSection">
+            <div class="batch-header">
+                <div class="batch-title">>>> 批量解析结果</div>
+                <button class="batch-download-all" id="batchDownloadAllBtn" disabled>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    下载全部
+                </button>
+            </div>
+            <div class="batch-list" id="batchList"></div>
+        </section>
+        
+        <!-- History -->
+        <section class="history-section" id="historySection" style="display:none">
+            <div class="history-header">
+                <div class="history-title">解析历史</div>
+                <button class="history-clear" id="clearHistory">清空</button>
+            </div>
+            <div class="history-list" id="historyList"></div>
+        </section>
+    </main>
+    
     <!-- Footer -->
     <footer id="features">
         <p>清清解析 · 短视频无水印解析工具</p>
-        <p style="margin-top:8px">完全免费，请合法使用</p>
-        <p style="margin-top:8px">支持抖音、快手、小红书、B站</p>
+        <p>完全免费，请合法使用</p>
+        <p>支持抖音、快手、小红书、B站</p>
     </footer>
-
+    
     <script>
     (function() {
         'use strict';
-
+        
         const API_BASE = '';
         let currentPlatform = 'douyin';
         let currentMode = 'batch';
         let history = JSON.parse(localStorage.getItem('qingqingjiexi_history') || '[]');
-
+        
+        // Create floating pixels
+        const pixelBg = document.getElementById('pixelBg');
+        for (let i = 0; i < 30; i++) {
+            const pixel = document.createElement('div');
+            pixel.className = 'pixel';
+            pixel.style.left = Math.random() * 100 + '%';
+            pixel.style.animationDelay = Math.random() * 20 + 's';
+            pixel.style.animationDuration = (15 + Math.random() * 10) + 's';
+            const colors = ['#ff2d95', '#00f5ff', '#ffe600', '#39ff14', '#bf00ff'];
+            pixel.style.background = colors[Math.floor(Math.random() * colors.length)];
+            pixelBg.appendChild(pixel);
+        }
+        
         // DOM elements
-        const navbar = document.getElementById('navbar');
         const urlInput = document.getElementById('urlInput');
         const parseBtn = document.getElementById('parseBtn');
         const resultSection = document.getElementById('resultSection');
@@ -1016,40 +926,29 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
         const statusMessage = document.getElementById('statusMessage');
         const historySection = document.getElementById('historySection');
         const historyList = document.getElementById('historyList');
-
-        // Navigation scroll effect
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 10);
-        });
-
-        // Init default mode
-        switchMode('batch');
-
+        
         // Mode toggle
         document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
         document.getElementById('modeBatch').addEventListener('click', () => switchMode('batch'));
-
+        
         function switchMode(mode) {
             currentMode = mode;
             document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
             document.getElementById('modeBatch').classList.toggle('active', mode === 'batch');
-            document.getElementById('modeHint').textContent = mode === 'single' ? '粘贴链接自动解析' : '一行一个链接，支持多个';
-
+            
             if (mode === 'batch') {
                 urlInput.placeholder = '粘贴多个视频链接，每行一个...\n例如：\nhttps://v.douyin.com/xxx1\nhttps://v.douyin.com/xxx2';
                 urlInput.rows = 4;
-                urlInput.classList.add('batch-mode');
             } else {
-                urlInput.placeholder = '粘贴视频分享链接，如 https://v.douyin.com/...';
-                urlInput.rows = 1;
-                urlInput.classList.remove('batch-mode');
+                urlInput.placeholder = '粘贴视频分享链接...';
+                urlInput.rows = 2;
             }
-
+            
             resultSection.classList.remove('show');
             batchSection.classList.remove('show');
             hideStatus();
         }
-
+        
         // Platform tabs
         document.querySelectorAll('.platform-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -1058,82 +957,64 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
                 currentPlatform = tab.dataset.platform;
             });
         });
-
+        
         // Paste button
         document.getElementById('pasteBtn').addEventListener('click', async () => {
             try {
                 const text = await navigator.clipboard.readText();
                 urlInput.value = text;
-                if (currentMode === 'single') {
-                    const cleanUrl = extractUrl(text);
-                    if (cleanUrl) handleParse();
-                }
+                if (currentMode === 'single') handleParse();
             } catch (err) {
-                showStatus('无法读取剪贴板，请手动粘贴', 'error');
+                showStatus('无法读取剪贴板', 'error');
             }
         });
-
+        
         // Parse events
+        parseBtn.addEventListener('click', handleParse);
         urlInput.addEventListener('paste', () => {
             setTimeout(() => {
-                const raw = urlInput.value.trim();
-                if (!raw) return;
-                const cleanUrl = extractUrl(raw);
-                if (cleanUrl && cleanUrl !== raw && currentMode === 'single') {
-                    urlInput.value = cleanUrl;
-                }
-                handleParse();
+                if (currentMode === 'single') handleParse();
             }, 100);
         });
-
-        parseBtn.addEventListener('click', handleParse);
-        urlInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleParse();
-            }
-        });
-
+        
         // Main parse function
         async function handleParse() {
-            if (currentMode === 'batch') {
-                return handleBatchParse();
-            }
-
+            if (currentMode === 'batch') return handleBatchParse();
+            
             let url = extractUrl(urlInput.value.trim());
             if (!url) {
                 showStatus('请输入视频链接', 'error');
                 return;
             }
-
+            
             setLoading(true);
             hideStatus();
             resultSection.classList.remove('show');
             batchSection.classList.remove('show');
-
+            
             try {
                 const resp = await fetch(`${API_BASE}/api/parse`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url, platform: currentPlatform })
                 });
-
+                
                 const data = await resp.json();
-
+                
                 if (data.code === 0 && data.data) {
                     showSingleResult(data.data);
                     addToHistory(data.data);
                     showStatus('解析成功', 'success');
                 } else {
-                    showStatus(data.msg || '解析失败，请检查链接是否正确', 'error');
+                    showStatus(data.msg || '解析失败', 'error');
                 }
             } catch (err) {
-                showStatus('无法连接到服务器，请确认后端服务已启动', 'error');
+                showStatus('无法连接到服务器', 'error');
             } finally {
                 setLoading(false);
             }
         }
-
+        
         // Batch parse
         async function handleBatchParse() {
             const raw = urlInput.value.trim();
@@ -1141,38 +1022,36 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
                 showStatus('请输入视频链接', 'error');
                 return;
             }
-
+            
             const lines = raw.split('\n').map(l => extractUrl(l.trim())).filter(Boolean);
             if (lines.length === 0) {
-                showStatus('未能从文本中提取到有效的视频链接', 'error');
+                showStatus('未能提取到有效链接', 'error');
                 return;
             }
             if (lines.length > 20) {
-                showStatus('批量解析最多支持 20 个链接', 'error');
+                showStatus('最多支持 20 个链接', 'error');
                 return;
             }
-
+            
             setLoading(true);
-            hideStatus();
             resultSection.classList.remove('show');
             batchSection.classList.add('show');
-
+            
             let batchResults = lines.map((url, i) => ({
                 url,
                 platform: detectPlatformFromUrl(url),
                 index: i,
                 status: 'pending',
-                data: null,
-                error: null
+                data: null
             }));
-
+            
             renderBatchList(batchResults);
             let successCount = 0;
-
+            
             for (let i = 0; i < batchResults.length; i++) {
                 batchResults[i].status = 'parsing';
                 renderBatchList(batchResults);
-
+                
                 try {
                     const resp = await fetch(`${API_BASE}/api/parse`, {
                         method: 'POST',
@@ -1180,62 +1059,44 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
                         body: JSON.stringify({ url: batchResults[i].url, platform: batchResults[i].platform })
                     });
                     const data = await resp.json();
-
+                    
                     if (data.code === 0 && data.data) {
                         batchResults[i].status = 'success';
                         batchResults[i].data = data.data;
                         successCount++;
                     } else {
                         batchResults[i].status = 'error';
-                        batchResults[i].error = data.msg;
                     }
                 } catch (err) {
                     batchResults[i].status = 'error';
-                    batchResults[i].error = '网络错误';
                 }
-
+                
                 renderBatchList(batchResults);
             }
-
+            
             setLoading(false);
             batchDownloadAllBtn.disabled = successCount === 0;
-
-            if (successCount > 0) {
-                showStatus(`批量解析完成：${successCount}/${batchResults.length} 个成功`, successCount === batchResults.length ? 'success' : 'error');
-            } else {
-                showStatus('所有链接解析失败', 'error');
-            }
+            showStatus(`批量解析完成：${successCount}/${batchResults.length} 个成功`, successCount === batchResults.length ? 'success' : 'error');
         }
-
+        
         function detectPlatformFromUrl(url) {
-            if (/douyin|抖音|iesdouyin|v\.douyin/i.test(url)) return 'douyin';
-            if (/kuaishou|快手|v\.kuaishou|v\.kwai/i.test(url)) return 'kuaishou';
-            if (/xiaohongshu|小红书|xhslink/i.test(url)) return 'xiaohongshu';
-            if (/bilibili|b站|b23\.tv/i.test(url)) return 'bilibili';
+            if (/douyin|iesdouyin|v\.douyin/i.test(url)) return 'douyin';
+            if (/kuaishou|v\.kuaishou/i.test(url)) return 'kuaishou';
+            if (/xiaohongshu|xhslink/i.test(url)) return 'xiaohongshu';
+            if (/bilibili|b23\.tv/i.test(url)) return 'bilibili';
             return currentPlatform;
         }
-
-        // Detect mobile device
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
+        
         // Download function
         window.downloadFile = async function(videoUrl, filename, type) {
-            // Mobile: show video in new tab with download hint
             if (isMobile()) {
                 showMobileDownloadModal(videoUrl, filename, type);
                 return;
             }
-
-            showStatus('正在下载，请稍候...', 'info');
+            
+            showStatus('正在下载...', 'info');
             try {
-                const resp = await fetch(videoUrl, {
-                    method: 'GET',
-                    mode: 'cors',
-                    credentials: 'omit'
-                });
-                
+                const resp = await fetch(videoUrl, { method: 'GET', mode: 'cors' });
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
                 
                 const blob = await resp.blob();
@@ -1249,132 +1110,60 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
                 URL.revokeObjectURL(blobUrl);
                 showStatus('下载完成', 'success');
             } catch (err) {
-                showStatus('已打开视频，请点击右下角「⋮」按钮下载', 'success');
-                const a = document.createElement('a');
-                a.href = videoUrl;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                showStatus('已打开视频，请手动保存', 'success');
+                window.open(videoUrl, '_blank');
             }
         };
-
-        // Mobile download modal
+        
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+        
         function showMobileDownloadModal(videoUrl, filename, type) {
             const isAudio = type === 'audio';
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.9);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 10000;
-                padding: 16px;
-            `;
-            
             const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-            const hintText = isIOS 
-                ? '长按视频 → 选择「存储视频」'
-                : '长按视频 → 选择「保存视频」';
+            const hintText = isIOS ? '长按视频 → 存储视频' : '长按视频 → 保存视频';
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:10000;padding:16px;';
             
             modal.innerHTML = `
-                <div style="
-                    background: var(--glass-bg);
-                    backdrop-filter: var(--glass-blur);
-                    border: 1px solid var(--glass-border);
-                    border-radius: var(--radius-lg);
-                    padding: 16px;
-                    max-width: 400px;
-                    width: 100%;
-                    text-align: center;
-                    color: var(--text-primary);
-                ">
+                <div style="background:#12121a;border:2px solid #00f5ff;padding:16px;max-width:400px;width:100%;text-align:center;">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-                        <h3 style="font-size: 16px;">${isAudio ? '🎵 下载音频' : '📹 下载视频'}</h3>
-                        <button onclick="this.closest('.mobile-modal').remove()" style="background:transparent;border:none;color:var(--text-secondary);font-size:24px;cursor:pointer;">×</button>
+                        <h3 style="font-size:14px;">${isAudio ? '🎵 下载音频' : '📹 下载视频'}</h3>
+                        <button onclick="this.closest('.mobile-modal').remove()" style="background:transparent;border:none;color:#8888aa;font-size:24px;cursor:pointer;">×</button>
                     </div>
-                    <p style="color: var(--accent-primary); font-size: 14px; margin-bottom: 12px;">
-                        📱 ${hintText}
-                    </p>
-                    ${isAudio ? `
-                        <audio controls src="${videoUrl}" style="width:100%;margin-bottom:12px;"></audio>
-                    ` : `
-                        <video controls playsinline webkit-playsinline src="${videoUrl}" style="width:100%;max-height:50vh;border-radius:12px;margin-bottom:12px;"></video>
-                    `}
-                    <a href="${videoUrl}" download="${filename}" style="
-                        display: block;
-                        background: var(--accent-gradient);
-                        color: white;
-                        padding: 12px 20px;
-                        border-radius: var(--radius-md);
-                        text-decoration: none;
-                        font-weight: 600;
-                        font-size: 14px;
-                    ">点击下载</a>
+                    <p style="color:#00f5ff;font-size:12px;margin-bottom:12px;">📱 ${hintText}</p>
+                    ${isAudio ? `<audio controls src="${videoUrl}" style="width:100%;margin-bottom:12px;"></audio>` : `<video controls playsinline src="${videoUrl}" style="width:100%;max-height:50vh;margin-bottom:12px;"></video>`}
+                    <a href="${videoUrl}" download="${filename}" style="display:block;background:linear-gradient(90deg,#ff2d95,#bf00ff);color:white;padding:12px 20px;text-decoration:none;font-weight:600;font-size:14px;">点击下载</a>
                 </div>
             `;
             modal.className = 'mobile-modal';
             document.body.appendChild(modal);
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.remove();
-            });
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
         }
-
+        
         // Show single result
         function showSingleResult(info) {
             const platformNames = { douyin: '抖音', kuaishou: '快手', xiaohongshu: '小红书', bilibili: 'B站' };
             const safeName = (info.title || 'video').replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || 'video';
-
+            
             resultSection.innerHTML = `
                 <div class="result-card">
                     <div class="result-video">
-                        ${info.cover ? `<img src="${info.cover}" alt="cover">` : ''}
-                        ${info.video_url ? `
-                            <video controls preload="metadata" poster="${info.cover || ''}" playsinline>
-                                <source src="${info.video_url}" type="video/mp4">
-                            </video>
-                        ` : `
-                            <div class="no-video">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                                暂无视频预览
-                            </div>
-                        `}
+                        ${info.video_url ? `<video controls preload="metadata" poster="${info.cover || ''}" playsinline><source src="${info.video_url}" type="video/mp4"></video>` : `<div class="no-video"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1"><polygon points="5 3 19 12 5 21 5 3"/></svg>暂无视频</div>`}
                     </div>
                     <div class="result-info">
                         <div class="result-title">${escapeHtml(info.title || '未知标题')}</div>
                         <div class="result-meta">
-                            ${info.author ? `<span class="result-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                ${escapeHtml(info.author)}
-                            </span>` : ''}
-                            <span class="result-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                                ${platformNames[info.platform] || '未知平台'}
-                            </span>
+                            ${info.author ? `<span class="result-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${escapeHtml(info.author)}</span>` : ''}
+                            <span class="result-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>${platformNames[info.platform] || '未知'}</span>
                         </div>
                         <div class="result-actions">
                             ${info.video_url ? `
-                                <button class="download-btn download-btn-video" onclick="downloadFile('${info.video_url}','${safeName}.mp4')">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                    下载视频
-                                </button>
-                                ${info.music_url ? `
-                                    <button class="download-btn download-btn-audio" onclick="downloadFile('${info.music_url}','${(info.music_title || safeName).replace(/[^\w\u4e00-\u9fff\-_. ]/g,"")}.mp3','audio')">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                                        下载音频
-                                    </button>
-                                ` : ''}
-                                <button class="download-btn download-btn-copy" onclick="navigator.clipboard.writeText('${info.video_url}').then(()=>{this.textContent='已复制';setTimeout(()=>this.textContent='复制链接',1500)})">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                    复制链接
-                                </button>
+                                <button class="download-btn download-btn-video" onclick="downloadFile('${info.video_url}','${safeName}.mp4')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>下载视频</button>
+                                ${info.music_url ? `<button class="download-btn download-btn-audio" onclick="downloadFile('${info.music_url}','${(info.music_title || safeName).replace(/[^\w\u4e00-\u9fff\-_. ]/g,"")}.mp3','audio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>下载音频</button>` : ''}
+                                <button class="download-btn download-btn-copy" onclick="navigator.clipboard.writeText('${info.video_url}').then(()=>{this.textContent='已复制';setTimeout(()=>this.innerHTML='<svg viewBox=\'0 0 24 24\' width=\'16\' height=\'16\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><rect x=\'9\' y=\'9\' width=\'13\' height=\'13\' rx=\'2\'/><path d=\'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\'/></svg>复制链接',1500)})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>复制链接</button>
                             ` : ''}
                         </div>
                     </div>
@@ -1383,17 +1172,16 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
             resultSection.classList.add('show');
             resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-
+        
         // Render batch list
         function renderBatchList(items) {
-            const statusLabels = { pending: '等待中', parsing: '解析中', success: '已解析', error: '失败' };
+            const statusLabels = { pending: '等待中', parsing: '解析中', success: '成功', error: '失败' };
             
             batchList.innerHTML = items.map((item, i) => {
-                const statusClass = item.status === 'parsing' ? 'pending' : item.status;
                 const title = item.data?.title || item.url || `视频 ${i + 1}`;
                 const cover = item.data?.cover || '';
                 const safeName = title.replace(/[^\w\u4e00-\u9fff\-_. ]/g, '').trim() || `video_${i+1}`;
-
+                
                 return `
                     <div class="batch-item">
                         <img class="batch-item-thumb" src="${cover}" alt="" onerror="this.style.display='none'">
@@ -1401,31 +1189,24 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
                             <div class="batch-item-title">${escapeHtml(title)}</div>
                             <div class="batch-item-meta">${item.data?.author || ''}</div>
                         </div>
-                        <span class="batch-item-status ${statusClass}">${statusLabels[item.status] || item.status}</span>
-                        <div class="batch-item-actions">
+                        <span class="batch-item-status ${item.status === 'parsing' ? 'pending' : item.status}">${statusLabels[item.status] || item.status}</span>
+                        <div style="display:flex;gap:6px;">
                             ${item.status === 'success' && item.data?.video_url ? `
-                                <button class="batch-item-btn" onclick="downloadFile('${item.data.video_url}','${safeName}.mp4')" title="下载视频">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                </button>
-                                <button class="batch-item-btn" onclick="navigator.clipboard.writeText('${item.data.video_url}')" title="复制链接">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                </button>
+                                <button class="batch-item-btn" onclick="downloadFile('${item.data.video_url}','${safeName}.mp4')" title="下载"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
                             ` : ''}
                         </div>
                     </div>
                 `;
             }).join('');
         }
-
+        
         // Batch download all
         batchDownloadAllBtn.addEventListener('click', () => {
-            const buttons = batchList.querySelectorAll('.batch-item-btn[title="下载视频"]');
-            buttons.forEach((btn, i) => {
-                setTimeout(() => btn.click(), i * 500);
-            });
+            const buttons = batchList.querySelectorAll('.batch-item-btn[title="下载"]');
+            buttons.forEach((btn, i) => setTimeout(() => btn.click(), i * 500));
         });
-
-        // History functions
+        
+        // History
         function addToHistory(info) {
             const item = {
                 title: info.title,
@@ -1439,16 +1220,16 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
             localStorage.setItem('qingqingjiexi_history', JSON.stringify(history));
             renderHistory();
         }
-
+        
         function renderHistory() {
             if (history.length === 0) {
                 historySection.style.display = 'none';
                 return;
             }
             historySection.style.display = 'block';
-
+            
             const platformIcons = { douyin: '🎵', kuaishou: '📱', xiaohongshu: '📕', bilibili: '📺' };
-
+            
             historyList.innerHTML = history.map(item => `
                 <div class="history-item" onclick="window.open('${item.url}', '_blank')">
                     <div class="history-item-icon">${platformIcons[item.platform] || '📹'}</div>
@@ -1459,52 +1240,43 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
                 </div>
             `).join('');
         }
-
+        
         document.getElementById('clearHistory').addEventListener('click', () => {
             history = [];
             localStorage.removeItem('qingqingjiexi_history');
             renderHistory();
         });
-
-        // Utility functions
+        
+        // Utilities
         function extractUrl(text) {
-            const urlMatch = text.match(/https?:\/\/[^\s\u4e00-\u9fff]+/);
-            if (urlMatch) {
-                return urlMatch[0].replace(/[，。！？、；：""''）】》]+$/, '');
-            }
-            return text.trim();
+            const match = text.match(/https?:\/\/[^\s\u4e00-\u9fff]+/);
+            return match ? match[0].replace(/[，。！？、；：""''）】》]+$/, '') : text.trim();
         }
-
+        
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
-
+        
         function setLoading(loading) {
             parseBtn.disabled = loading;
-            parseBtn.classList.toggle('loading', loading);
-            document.querySelector('.parse-icon').style.display = loading ? 'none' : '';
-            document.querySelector('.parse-loading').style.display = loading ? '' : 'none';
-            document.querySelector('.parse-text').textContent = loading ? '解析中...' : '开始解析';
+            parseBtn.querySelector('span').textContent = loading ? '解析中...' : '开始解析';
         }
-
+        
         function showStatus(msg, type) {
             statusMessage.textContent = msg;
             statusMessage.className = 'status-message show ' + type;
-            if (type === 'success') {
-                setTimeout(hideStatus, 3000);
-            }
+            if (type === 'success') setTimeout(hideStatus, 3000);
         }
-
+        
         function hideStatus() {
             statusMessage.classList.remove('show');
         }
-
+        
         // Init
         renderHistory();
     })();
     </script>
 </body>
 </html>
-
