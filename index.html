@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>抖音无水印下载 - 快手小红书B站视频解析下载 | 清清清</title>
-    <meta name="description" content="清清清免费短视频无水印解析下载工具，支持抖音、快手、小红书、B站视频解析，一键下载无水印高清视频，批量解析，在线使用无需安装。完全免费，请合法使用。">
-    <meta name="keywords" content="抖音下载,抖音无水印下载,快手下载,小红书下载,B站下载,视频解析,短视频下载,无水印视频,抖音解析,快手解析,清清清">
-    <meta name="author" content="清清清">
+    <title>抖音无水印下载 - 快手小红书B站视频解析下载 | 清清解析</title>
+    <meta name="description" content="清清解析免费短视频无水印解析下载工具，支持抖音、快手、小红书、B站视频解析，一键下载无水印高清视频，批量解析，在线使用无需安装。完全免费，请合法使用。">
+    <meta name="keywords" content="抖音下载,抖音无水印下载,快手下载,小红书下载,B站下载,视频解析,短视频下载,无水印视频,抖音解析,快手解析,清清解析">
+    <meta name="author" content="清清解析">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://freejiexi.cc.cd">
     
     <!-- Open Graph / 社交分享 -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://freejiexi.cc.cd">
-    <meta property="og:title" content="抖音无水印下载 - 快手小红书B站视频解析下载 | 清清清">
+    <meta property="og:title" content="抖音无水印下载 - 快手小红书B站视频解析下载 | 清清解析">
     <meta property="og:description" content="免费短视频无水印解析下载工具，支持抖音、快手、小红书、B站，一键下载高清无水印视频。">
     <meta property="og:image" content="https://freejiexi.cc.cd/og-image.png">
     
@@ -892,8 +892,8 @@
     <!-- Navigation -->
     <nav id="navbar">
         <a href="#" class="nav-logo">
-            <div class="nav-logo-icon">清</div>
-            <span class="nav-logo-text">清清清</span>
+            <div class="nav-logo-icon">清解析</div>
+            <span class="nav-logo-text">清清解析</span>
         </a>
         <ul class="nav-links">
             <li><a href="#parse">解析</a></li>
@@ -991,7 +991,7 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
 
     <!-- Footer -->
     <footer id="features">
-        <p>清清清 · 短视频无水印解析工具</p>
+        <p>清清解析 · 短视频无水印解析工具</p>
         <p style="margin-top:8px">完全免费，请合法使用</p>
         <p style="margin-top:8px">支持抖音、快手、小红书、B站</p>
     </footer>
@@ -1003,7 +1003,7 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
         const API_BASE = '';
         let currentPlatform = 'douyin';
         let currentMode = 'batch';
-        let history = JSON.parse(localStorage.getItem('qingqingqing_history') || '[]');
+        let history = JSON.parse(localStorage.getItem('qingqingjiexi_history') || '[]');
 
         // DOM elements
         const navbar = document.getElementById('navbar');
@@ -1436,7 +1436,7 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
             };
             history.unshift(item);
             if (history.length > 10) history.pop();
-            localStorage.setItem('qingqingqing_history', JSON.stringify(history));
+            localStorage.setItem('qingqingjiexi_history', JSON.stringify(history));
             renderHistory();
         }
 
@@ -1462,7 +1462,7 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
 
         document.getElementById('clearHistory').addEventListener('click', () => {
             history = [];
-            localStorage.removeItem('qingqingqing_history');
+            localStorage.removeItem('qingqingjiexi_history');
             renderHistory();
         });
 
@@ -1507,3 +1507,4 @@ https://v.douyin.com/xxx2" rows="4"></textarea>
     </script>
 </body>
 </html>
+
